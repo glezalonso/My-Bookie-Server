@@ -41,34 +41,12 @@ const MatchModel = new Schema({
 
   }],
   score: [{
-    local: [{
-      first: {
-        type: Number
-      },
-      second: {
-        type: Number
-      },
-      third: {
-        type: Number
-      },
-      fourth: {
-        type: Number
-      }
-    }],
-    away: [{
-      first: {
-        type: Number
-      },
-      second: {
-        type: Number
-      },
-      third: {
-        type: Number
-      },
-      fourth: {
-        type: Number
-      }
-    }]
+    local: {
+      type: Number
+    },
+    away: {
+      type: Number
+    }
   }],
   winner: {
     type: String

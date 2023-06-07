@@ -13,7 +13,6 @@ const getMatch = (req, res) => {
 }
 
 const createMatch = (req, res) => {
-  console.log(req.body)
   const { date, teamHome, teamAway, round, status } = req.body
   const newMatch = new MatchModel({
     date,
@@ -24,6 +23,34 @@ const createMatch = (req, res) => {
   newMatch.save()
     .then(data => res.status(200).send(data))
     .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al crear el juego, error' }, error))
+}
+
+const updateMatch = (req, res) => {
+  const { id } = req.params
+  const { date, teamHome, teamAway, round, status } = req.body
+  MatchModel.findOneAndUpdate({ _id: id }, {
+    date,
+    teams: { local: teamHome, away: teamAway },
+    round,
+    status
+  }, { new: true })
+    .then(data => res.status(201).send(data))
+    .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al actualizar el juego', error }))
+}
+
+const deleteMatch = (req, res) => {
+  const { id } = req.params
+  MatchModel.findOneAndDelete({ _id: id })
+    .then(data => res.status(200).send(data))
+    .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al intentar borrar el juego', error }))
+}
+
+const closeMatch = (req, res) => {
+  const { id } = req.params
+  const { local, away } = req.body
+  MatchModel.findOneAndUpdate({ _id: id }, { $push: { score: { local, away } }, status: false }, { new: true })
+    .then(data => res.status(210).send(data))
+    .catch()
 }
 
 const addLineUp = (req, res) => {
@@ -61,35 +88,6 @@ const removeLineUp = (req, res) => {
       })
       .catch()
   }
-}
-
-const updateMatch = (req, res) => {
-  const { id } = req.params
-  const { date, teamHome, teamAway, round, status } = req.body
-  MatchModel.findOneAndUpdate({ _id: id }, {
-    date,
-    teams: { local: teamHome, away: teamAway },
-    round,
-    status
-  }, { new: true })
-    .then(data => res.status(201).send(data))
-    .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al actualizar el juego', error }))
-}
-
-const deleteMatch = (req, res) => {
-  const { id } = req.params
-  MatchModel.findOneAndDelete({ _id: id })
-    .then(data => res.status(200).send(data))
-    .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al intentar borrar el juego', error }))
-}
-
-const closeMatch = (req, res) => {
-  const { id } = req.params
-  const { lfirst, lsecond, lthird, lfourth, afirst, asecond, athird, afourth } = req.body
-  console.log(req.body)
-  MatchModel.findOneAndUpdate({ _id: id }, { $push: { score: { local: { first: lfirst, second: lsecond, third: lthird, fourth: lfourth }, away: { first: afirst, second: asecond, third: athird, fourth: afourth } } } }, { new: true })
-    .then(data => res.status(210).send(data))
-    .catch()
 }
 
 module.exports = { getMatches, getMatch, createMatch, updateMatch, deleteMatch, addLineUp, removeLineUp, closeMatch }
