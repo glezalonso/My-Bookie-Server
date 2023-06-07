@@ -1,9 +1,11 @@
+// Dependencies
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const dotenv = require('dotenv')
 const connection = require('./database/connection')
 
+// Routes
 const sportRoutes = require('./routes/Sport.routes')
 const userRoutes = require('./routes/User.routes')
 const leagueRoutes = require('./routes/League.routes')
@@ -15,15 +17,18 @@ const roundRoutes = require('./routes/Round.routes')
 
 const app = express()
 
+// Middlewares
 dotenv.config({ path: 'src/.env' })
 app.use(express.json())
 app.use(cors({ origin: process.env.CLIENT, credentials: true }))
 app.use(morgan('tiny'))
 app.disable('x-powered-by')
 
+// Settings serve
 app.set('title', 'myBookie')
 app.set('port', process.env.PORT || 3000)
 
+// Use routes
 app.get('/', (req, res) => res.json({ msg: 'index' }))
 app.use('/api/users', userRoutes)
 app.use('/api/sports', sportRoutes)
@@ -35,6 +40,7 @@ app.use('/api/matches', matchRoutes)
 app.use('/api/rounds', roundRoutes)
 app.get('/*', (req, res) => res.status(404).send({ error: 'Ruta no encontrada' }))
 
+// server listen when connection to database is already
 connection()
   .then(() => {
     try {
