@@ -6,6 +6,7 @@ const dotenv = require('dotenv')
 const connection = require('./database/connection')
 
 // Routes
+const apiRoutes = require('./routes/Api.routes')
 const sportRoutes = require('./routes/Sport.routes')
 const userRoutes = require('./routes/User.routes')
 const leagueRoutes = require('./routes/League.routes')
@@ -16,7 +17,7 @@ const matchRoutes = require('./routes/Match.routes')
 const roundRoutes = require('./routes/Round.routes')
 
 const app = express()
-
+const verifyToken = require('./middlewares/verifyToken')
 // Middlewares
 dotenv.config({ path: 'src/.env' })
 app.use(express.json())
@@ -30,14 +31,15 @@ app.set('port', process.env.PORT || 3000)
 
 // Use routes
 app.get('/', (req, res) => res.json({ msg: 'index' }))
-app.use('/api/users', userRoutes)
-app.use('/api/sports', sportRoutes)
-app.use('/api/leagues', leagueRoutes)
-app.use('/api/players', playerRoutes)
-app.use('/api/seasons', seasonRoutes)
-app.use('/api/teams', teamRoutes)
-app.use('/api/matches', matchRoutes)
-app.use('/api/rounds', roundRoutes)
+app.use('/api', apiRoutes)
+app.use('/api/users', verifyToken.verifyToken, userRoutes)
+app.use('/api/sports', verifyToken.verifyToken, sportRoutes)
+app.use('/api/leagues', verifyToken.verifyToken, leagueRoutes)
+app.use('/api/players', verifyToken.verifyToken, playerRoutes)
+app.use('/api/seasons', verifyToken.verifyToken, seasonRoutes)
+app.use('/api/teams', verifyToken.verifyToken, teamRoutes)
+app.use('/api/matches', verifyToken.verifyToken, matchRoutes)
+app.use('/api/rounds', verifyToken.verifyToken, roundRoutes)
 app.get('/*', (req, res) => res.status(404).send({ error: 'Ruta no encontrada' }))
 
 // server listen when connection to database is already

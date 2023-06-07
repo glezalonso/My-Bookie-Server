@@ -1,10 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const { getUsers, getUser, loginUser, registerUser, updateUser, deleteUser } = require('../controllers/User.controllers')
+const { getUsers, getUser, registerUser, updateUser, deleteUser } = require('../controllers/User.controllers')
 
-// expected middleware to validate route
-// path login, loginUser controller to validate login
-router.post('/login', loginUser)
 // path users/login, registerUser controller to register in database
 router.post('/register', registerUser)
 // path users/register, getUsers controlller to get all users
@@ -15,7 +12,5 @@ router.get('/:id', getUser)
 router.put('/:id', updateUser)
 // path delete, id param and method delete. deleteUser controller to delete one user only
 router.delete('/:id', deleteUser)
-// path users/recovery to recovery email from opt code
-router.get('/recovery')
 
 module.exports = router
