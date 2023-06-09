@@ -3,7 +3,6 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const dotenv = require('dotenv')
-const connection = require('./database/connection')
 
 // Routes
 const apiRoutes = require('./routes/Api.routes')
@@ -28,6 +27,7 @@ app.disable('x-powered-by')
 // Settings serve
 app.set('title', 'myBookie')
 app.set('port', process.env.PORT || 3000)
+const connection = require('./database/connection')
 
 // Use routes
 app.get('/', (req, res) => res.json({ msg: 'index' }))

@@ -17,7 +17,6 @@ const getUser = (req, res) => {
 
 const loginUser = async (req, res) => {
   const { username, password } = req.body
-  console.log(req.body)
   try {
     const existUser = await UserModel.findOne({ username })
     if (!existUser) return res.status(501).send({ message: 'Usuario y/o contraseña no valida' })
