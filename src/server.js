@@ -52,3 +52,5 @@ connection()
     }
   })
   .catch((error) => console.log(`El servidor no se pudo conectar a la base de datos ${error}`))
+
+module.export = app
