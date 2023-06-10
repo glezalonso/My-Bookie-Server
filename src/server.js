@@ -30,7 +30,7 @@ app.set('port', process.env.PORT || 3000)
 const connection = require('./database/connection')
 
 // Use routes
-app.get('/', (req, res) => res.json({ msg: 'index' }))
+app.get('/', (req, res) => res.send('INDEX'))
 app.use('/api', apiRoutes)
 app.use('/api/users', verifyToken.verifyToken, userRoutes)
 app.use('/api/sports', verifyToken.verifyToken, sportRoutes)
