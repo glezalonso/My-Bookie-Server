@@ -21,9 +21,8 @@ const verifyToken = require('./middlewares/verifyToken')
 dotenv.config({ path: 'src/.env' })
 app.use(express.json())
 app.use(cors({
-  "origin": "https://my-bookie.vercel.app/",
+  "origin": "https://my-bookie-git-main-glezalonso.vercel.app/",
   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "preflightContinue": false,
   "optionsSuccessStatus": 204,
   "credentials":true
 }))
