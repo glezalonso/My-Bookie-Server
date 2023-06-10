@@ -20,12 +20,7 @@ const verifyToken = require('./middlewares/verifyToken')
 // Middlewares
 dotenv.config({ path: 'src/.env' })
 app.use(express.json())
-app.use(cors({
-  "origin": "https://my-bookie-git-main-glezalonso.vercel.app/",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "optionsSuccessStatus": 204,
-  "credentials":true
-}))
+app.use(cors())
 app.use(morgan('tiny'))
 app.disable('x-powered-by')
 
