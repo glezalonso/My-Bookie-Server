@@ -20,7 +20,12 @@ const verifyToken = require('./middlewares/verifyToken')
 // Middlewares
 dotenv.config({ path: 'src/.env' })
 app.use(express.json())
-app.use(cors({origin: process.env.CLIENT, credentials: true}))
+app.use(cors({
+  "origin": "*",
+  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+  "preflightContinue": false,
+  "optionsSuccessStatus": 204
+}))
 app.use(morgan('tiny'))
 app.disable('x-powered-by')
 
