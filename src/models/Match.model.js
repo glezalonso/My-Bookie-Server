@@ -6,19 +6,16 @@ const MatchModel = new Schema({
     type: Date,
     require: [true, 'Este campo es requerido']
   },
-  teams: [{
-    local: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Team',
-      require: [true, 'Este campo es equerido']
-    },
-    away: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Team',
-      require: [true, 'Este campo es equerido']
-    }
-
-  }],
+  local: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Team',
+    require: [true, 'Este campo es equerido']
+  },
+  away: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Team',
+    require: [true, 'Este campo es equerido']
+  },
   lineup: [{
     local: [{
       playerId: {
@@ -48,9 +45,6 @@ const MatchModel = new Schema({
       type: Number
     }
   }],
-  winner: {
-    type: String
-  },
   round: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'Round',

@@ -1,13 +1,13 @@
 const MatchModel = require('../models/Match.model')
 
 const getMatches = (req, res) => {
-  MatchModel.find({}).populate('round teams.local teams.away teams.local.players lineup.away', { __v: 0 })
+  MatchModel.find({}).populate('round local away lineup.local lineup.away', { __v: 0 })
     .then(data => res.status(200).send(data))
     .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
 }
 const getMatch = (req, res) => {
   const { id } = req.params
-  MatchModel.findOne({ _id: id }).populate('round teams.local teams.away teams.local.players', { __v: 0 })
+  MatchModel.findOne({ _id: id }).populate('round local away lineup.local lineup.away', { __v: 0 })
     .then(data => res.status(200).send(data))
     .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al mostar los juegos' }, error))
 }
@@ -16,7 +16,8 @@ const createMatch = (req, res) => {
   const { date, teamHome, teamAway, round, status } = req.body
   const newMatch = new MatchModel({
     date,
-    teams: { local: teamHome, away: teamAway },
+    local: teamHome,
+    away: teamAway,
     round,
     status
   })
@@ -30,7 +31,8 @@ const updateMatch = (req, res) => {
   const { date, teamHome, teamAway, round, status } = req.body
   MatchModel.findOneAndUpdate({ _id: id }, {
     date,
-    teams: { local: teamHome, away: teamAway },
+    local: teamHome,
+    away: teamAway,
     round,
     status
   }, { new: true })
@@ -74,7 +76,6 @@ const addLineUp = (req, res) => {
 const removeLineUp = (req, res) => {
   const { id } = req.params
   const { playerId, player, lineId, type } = req.body
-  console.log(req.body)
   if (type === 'local') {
     MatchModel.findOneAndUpdate({ _id: id }, { $pull: { lineup: { local: { playerId, player, _id: lineId } } } }, { new: true })
       .then(data => {
