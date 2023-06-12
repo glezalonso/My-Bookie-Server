@@ -50,6 +50,18 @@ const MatchModel = new Schema({
     ref: 'Round',
     required: [true, 'Este campo es requerido']
   },
+  season: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Season',
+    required: [true, 'Este campo es requerido']
+
+  },
+  league: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'League',
+    required: [true, 'Este campo es requerido']
+
+  },
   status: {
     type: Boolean
   }

@@ -1,24 +1,27 @@
 const MatchModel = require('../models/Match.model')
 
 const getMatches = (req, res) => {
-  MatchModel.find({}).populate('round local away lineup.local lineup.away', { __v: 0 })
+  MatchModel.find({}).populate('round season league local away', { __v: 0 })
     .then(data => res.status(200).send(data))
     .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
 }
 const getMatch = (req, res) => {
   const { id } = req.params
-  MatchModel.findOne({ _id: id }).populate('round local away lineup.local lineup.away', { __v: 0 })
+  MatchModel.findOne({ _id: id }).populate('round season league local away', { __v: 0 })
     .then(data => res.status(200).send(data))
     .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al mostar los juegos' }, error))
 }
 
 const createMatch = (req, res) => {
-  const { date, teamHome, teamAway, round, status } = req.body
+  const { date, teamHome, teamAway, round, season, league, status } = req.body
+  console.log(req.body)
   const newMatch = new MatchModel({
     date,
     local: teamHome,
     away: teamAway,
     round,
+    season,
+    league,
     status
   })
   newMatch.save()
@@ -28,12 +31,14 @@ const createMatch = (req, res) => {
 
 const updateMatch = (req, res) => {
   const { id } = req.params
-  const { date, teamHome, teamAway, round, status } = req.body
+  const { date, teamHome, teamAway, round, season, league, status } = req.body
   MatchModel.findOneAndUpdate({ _id: id }, {
     date,
     local: teamHome,
     away: teamAway,
     round,
+    season,
+    league,
     status
   }, { new: true })
     .then(data => res.status(201).send(data))

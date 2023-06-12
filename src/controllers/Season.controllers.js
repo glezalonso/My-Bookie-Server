@@ -8,7 +8,6 @@ const getSeasons = (req, res) => {
 
 const getSeason = (req, res) => {
   const { id } = req.params
-  console.log(req.params)
   SeasonModel.findOne({ _id: id }).populate('league')
     .then(data => res.status(200).send(data))
     .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al mostar las temporadas 2' }, error))
