@@ -48,7 +48,7 @@ const deleteMatch = (req, res) => {
 const closeMatch = (req, res) => {
   const { id } = req.params
   const { local, away } = req.body
-  MatchModel.findOneAndUpdate({ _id: id }, { $push: { score: { local, away } }, status: false }, { new: true })
+  MatchModel.findOneAndUpdate({ _id: id }, { score: { local, away }, status: false }, { new: true })
     .then(data => res.status(210).send(data))
     .catch()
 }
