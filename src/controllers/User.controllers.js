@@ -26,7 +26,7 @@ const loginUser = async (req, res) => {
         if (!data) res.status(501).send({ message: 'Usuario y/o contraseña no valida' })
 
         const token = jwt.sign({ userId: existUser._id, username: existUser.username }, process.env.MY_SECRET, { expiresIn: '24h' })
-        res.status(201).send({ token, username: existUser.username })
+        res.status(201).send({ token, username: existUser.username, isAdmin: existUser.isAdmin })
       })
       .catch(err => console.error(err))
   } catch (error) {
@@ -35,7 +35,7 @@ const loginUser = async (req, res) => {
 }
 
 const registerUser = async (req, res) => {
-  const { username, password, email, fullname, rol } = req.body
+  const { username, password, email, fullName, isAdmin } = req.body
   try {
     const existUser = await UserModel.findOne({ username })
     if (existUser) return res.status(404).send({ message: 'Usuario ya existe!' })
@@ -48,8 +48,8 @@ const registerUser = async (req, res) => {
       username,
       password: passCrypt,
       email,
-      fullname,
-      rol
+      fullName,
+      isAdmin
     })
     registerUser.save()
       .then(data => {
@@ -65,15 +65,15 @@ const registerUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { id } = req.params
-  const { username, password, email, fullname, rol } = req.body
+  const { username, password, email, fullName, isAdmin } = req.body
   try {
     const passCrypt = await bcrypt.hash(password, 10)
     await UserModel.findOneAndUpdate({ _id: id }, {
       username,
       password: passCrypt,
       email,
-      fullname,
-      rol
+      fullName,
+      isAdmin
     }, { new: true })
       .then(data => res.status(201).send(data))
       .catch(error => res.status(501).send({ message: 'No se ha podido actualizar el usuario', error }))

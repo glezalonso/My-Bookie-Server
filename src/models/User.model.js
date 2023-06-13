@@ -20,8 +20,8 @@ const userSchema = new Schema({
   fullName: {
     type: String
   },
-  rol: {
-    type: String
+  isAdmin: {
+    type: Boolean
   }
 })
 
