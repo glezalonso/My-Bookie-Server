@@ -1,20 +1,19 @@
 const MatchModel = require('../models/Match.model')
 
 const getMatches = (req, res) => {
-  MatchModel.find({}).populate('round season league local away', { __v: 0 })
+  MatchModel.find({}).populate('round season league local away', { __v: 0 }).sort({ date: 'desc' })
     .then(data => res.status(200).send(data))
     .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
 }
 const getMatch = (req, res) => {
   const { id } = req.params
-  MatchModel.findOne({ _id: id }).populate('round season league local away', { __v: 0 })
+  MatchModel.findOne({ _id: id }).populate('round season league local away', { __v: 0 }).sort({ date: 'desc' })
     .then(data => res.status(200).send(data))
     .catch(error => res.status(501).send({ message: 'Ha ocurrido un error al mostar los juegos' }, error))
 }
 
 const createMatch = (req, res) => {
   const { date, teamHome, teamAway, round, season, league, status } = req.body
-  console.log(req.body)
   const newMatch = new MatchModel({
     date,
     local: teamHome,

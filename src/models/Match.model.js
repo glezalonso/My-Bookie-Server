@@ -3,8 +3,7 @@ const Schema = mongoose.Schema
 
 const MatchModel = new Schema({
   date: {
-    type: Date,
-    require: [true, 'Este campo es requerido']
+    type: String
   },
   local: {
     type: mongoose.SchemaTypes.ObjectId,
