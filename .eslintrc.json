@@ -12,6 +12,6 @@
         "ecmaVersion": "latest"
     },
     "rules": {
-       
+        "react/forbid-prop-types": 0
     }
 }
