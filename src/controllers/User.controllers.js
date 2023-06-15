@@ -17,21 +17,17 @@ const getUser = (req, res) => {
 
 const loginUser = async (req, res) => {
   const { username, password } = req.body
-  try {
-    const existUser = await UserModel.findOne({ username })
-    if (!existUser) return res.status(501).send({ message: 'Usuario y/o contraseña no valida' })
 
-    bcrypt.compare(password, existUser.password)
-      .then(data => {
-        if (!data) res.status(501).send({ message: 'Usuario y/o contraseña no valida' })
-
+  const existUser = await UserModel.findOne({ username })
+  if (!existUser) return res.status(501).send({ message: 'Usuario y/o contraseña no valida' })
+  bcrypt.compare(password, existUser.password)
+    .then(data => {
+      if (!data) { res.status(501).send({ message: 'Usuario y/o contraseña no valida' }) } else {
         const token = jwt.sign({ userId: existUser._id, username: existUser.username }, process.env.MY_SECRET, { expiresIn: '24h' })
         res.status(201).send({ token, username: existUser.username, isAdmin: existUser.isAdmin })
-      })
-      .catch(err => console.error(err))
-  } catch (error) {
-    return res.status(501).send({ message: 'Hubo un error al iniciar sesión', error })
-  }
+      }
+    })
+    .catch(err => console.error(err))
 }
 
 const registerUser = async (req, res) => {
