@@ -22,6 +22,9 @@ const userSchema = new Schema({
   },
   isAdmin: {
     type: Boolean
+  },
+  OTP: {
+    type: String
   }
 })
 

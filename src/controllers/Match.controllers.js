@@ -11,7 +11,7 @@ const getMatch = (req, res) => {
   if (ObjectId.isValid(id)) {
     MatchModel.findOne({ _id: id }).populate('round season league local away', { __v: 0 }).sort({ date: 'desc' })
       .then(data => res.status(200).json(data))
-      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostar los juegos' }, error))
+      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostar los juegos', error }))
   } else {
     res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
   }
@@ -30,7 +30,7 @@ const createMatch = (req, res) => {
   })
   newMatch.save()
     .then(data => res.status(200).json(data))
-    .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al crear el juego, error' }, error))
+    .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al crear el juego, error', error }))
 }
 
 const updateMatch = (req, res) => {
@@ -70,7 +70,7 @@ const closeMatch = (req, res) => {
   if (ObjectId.isValid(id)) {
     MatchModel.findOneAndUpdate({ _id: id }, { score: { local, away }, status: false }, { new: true })
       .then(data => res.status(210).json(data))
-      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al cerrar el juego' }, error))
+      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al cerrar el juego', error }))
   } else {
     res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
   }
@@ -83,11 +83,11 @@ const addLineUp = (req, res) => {
     if (type === 'local') {
       MatchModel.findOneAndUpdate({ _id: id }, { $push: { lineup: { local: { playerId, player } } } }, { new: true })
         .then(data => res.status(201).json(data))
-        .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al agregar el jugador a la alineación local' }, error))
+        .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al agregar el jugador a la alineación local', error }))
     } else {
       MatchModel.findOneAndUpdate({ _id: id }, { $push: { lineup: { away: { playerId, player } } } }, { new: true })
         .then(data => res.status(201).json(data))
-        .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al agregar el jugador a la alineación visitante' }, error))
+        .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al agregar el jugador a la alineación visitante', error }))
     }
   } else {
     res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
@@ -101,11 +101,11 @@ const removeLineUp = (req, res) => {
     if (type === 'local') {
       MatchModel.findOneAndUpdate({ _id: id }, { $pull: { lineup: { local: { playerId, player, _id: lineId } } } }, { new: true })
         .then(data => res.status(201).json(data))
-        .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al remover el jugador a la alineación visitante' }, error))
+        .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al remover el jugador a la alineación visitante', error }))
     } else {
       MatchModel.findOneAndUpdate({ _id: id }, { $pull: { lineup: { away: { playerId, player, _id: lineId } } } }, { new: true })
         .then(data => res.status(201).json(data))
-        .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al remover el jugador a la alineación visitante' }, error))
+        .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al remover el jugador a la alineación visitante', error }))
     }
   } else {
     res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })

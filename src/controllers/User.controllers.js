@@ -33,7 +33,7 @@ const loginUser = async (req, res) => {
         res.status(201).json({ token, username: existUser.username, isAdmin: existUser.isAdmin })
       }
     })
-    .catch(error => res.status(501).json({ message: 'hubo un error al iniciar sesión' }, error))
+    .catch(error => res.status(501).json({ message: 'hubo un error al iniciar sesión', error }))
 }
 
 const registerUser = async (req, res) => {

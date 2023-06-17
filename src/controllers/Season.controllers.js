@@ -12,7 +12,7 @@ const getSeason = (req, res) => {
   if (ObjectId.isValid(id)) {
     SeasonModel.findOne({ _id: id }).populate('league')
       .then(data => res.status(200).json(data))
-      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostar las temporadas 2' }, error))
+      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostar las temporadas 2', error }))
   } else {
     res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
   }
