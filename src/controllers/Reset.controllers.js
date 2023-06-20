@@ -29,7 +29,7 @@ const generateOTP = (req, res) => {
 
           transporter.sendMail(mailOptions, (err, response) => {
             if (err) {
-              res.status(500).json({ err })
+              res.status(500).json({ message: 'error al mandar el email', err })
             } else {
               UserModel.findOneAndUpdate({ email }, { OTP })
                 .then(() => res.status(200).json({ message: 'Se ha enviado email' }))
