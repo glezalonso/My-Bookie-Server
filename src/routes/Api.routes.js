@@ -8,7 +8,7 @@ router.post('/login', loginUser)
 // path generateOTP recovery email from opt code
 router.post('/generateOTP', generateOTP)
 // path  verifyOTP verifyOPT
-router.post('/verifyOtp', verifyOTP)
+router.post('/verifyOTP', verifyOTP)
 // path resetPassword
 router.put('/resetPassword', resetPassword)
 
