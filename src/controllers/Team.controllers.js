@@ -1,3 +1,4 @@
+const PlayerModel = require('../models/Player.model')
 const TeamModel = require('../models/Team.model')
 const ObjectId = require('mongoose').Types.ObjectId
 
@@ -38,7 +39,11 @@ const addPlayer = (req, res) => {
   const { playerId, player } = req.body
   if (ObjectId.isValid(id)) {
     TeamModel.findOneAndUpdate({ _id: id }, { $push: { players: { playerId, player } } }, { new: true }).populate('players', { poster: 0, __v: 0, status: 0, photo: 0, sport: 0 }).populate('sport', { description: 0, poster: 0, __v: 0 })
-      .then(data => res.json(data))
+      .then(data => {
+        PlayerModel.findOneAndUpdate({ _id: playerId }, { team: id }, { new: true })
+          .then(data => res.status(200).json(data))
+          .catch(error => res.status(500).json({ error }))
+      })
       .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al agregar el jugador', error }))
   } else {
     res.status(501).json({ message: 'Hubo un error en la petición' })
@@ -50,7 +55,10 @@ const removePlayer = (req, res) => {
   const { playerId, player } = req.body
   if (ObjectId.isValid(id)) {
     TeamModel.findOneAndUpdate({ _id: id }, { $pull: { players: { playerId, player } } }, { new: true }).populate('players', { poster: 0, __v: 0, status: 0, photo: 0, sport: 0 }).populate('sport', { description: 0, poster: 0, __v: 0 })
-      .then(data => res.send(data))
+      .then(data => {
+        PlayerModel.findOneAndUpdate({ _id: playerId }, { team: null }, { new: true })
+          .then(data => res.status(202).json(data))
+      })
       .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al remover el jugador', error }))
   } else {
     res.status(501).json({ message: 'Hubo un error en la petición' })

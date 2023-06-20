@@ -2,7 +2,7 @@ const SeasonModel = require('../models/Season.model')
 const ObjectId = require('mongoose').Types.ObjectId
 
 const getSeasons = (req, res) => {
-  SeasonModel.find({}).populate('league')
+  SeasonModel.find({}).populate('league sport')
     .then(data => res.status(200).json(data))
     .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrar las temporadas 1', error }))
 }
@@ -10,7 +10,7 @@ const getSeasons = (req, res) => {
 const getSeason = (req, res) => {
   const { id } = req.params
   if (ObjectId.isValid(id)) {
-    SeasonModel.findOne({ _id: id }).populate('league')
+    SeasonModel.findOne({ _id: id }).populate('league sport')
       .then(data => res.status(200).json(data))
       .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostar las temporadas 2', error }))
   } else {
@@ -19,12 +19,13 @@ const getSeason = (req, res) => {
 }
 
 const createSeason = (req, res) => {
-  const { season, description, status, league } = req.body
+  const { season, description, status, league, sport } = req.body
   const newSeason = new SeasonModel({
     season,
     description,
     status,
-    league
+    league,
+    sport
   })
   newSeason.save()
     .then(data => res.status(200).json(data))
@@ -36,13 +37,14 @@ const createSeason = (req, res) => {
 
 const updateSeason = (req, res) => {
   const { id } = req.params
-  const { season, description, status, league } = req.body
+  const { season, description, status, league, sport } = req.body
   if (ObjectId.isValid(id)) {
     SeasonModel.findOneAndUpdate({ _id: id }, {
       season,
       description,
       status,
-      league
+      league,
+      sport
     }, { new: true })
       .then(data => res.status(201).json(data))
       .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al actualizar la temporada', error }))

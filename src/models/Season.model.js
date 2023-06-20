@@ -16,6 +16,12 @@ const SeasonModel = new Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'League',
     required: [true, 'La temporada debe pertenecer a una liga']
+  },
+  sport: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Sport',
+    required: [true, 'La temporada debe pertenecer a un deporte']
+
   }
 })
 

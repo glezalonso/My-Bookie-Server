@@ -20,6 +20,10 @@ const PlayerModel = new Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'Sport',
     require: [true, 'El jugador debe pertenecer a un deporte']
+  },
+  team: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Team'
   }
 })
 

@@ -15,14 +15,20 @@ const RoundModel = new Schema({
     ref: 'Season',
     require: [true, 'La jornada debe pertenecer a una temporada']
   },
-  matches: [{
+  league: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: 'Match'
-  }
-  ],
+    ref: 'League',
+    require: [true, 'La jornada debe pertenecer a una Liga']
+
+  },
+  sport: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Sport',
+    require: [true, 'La jornada debe pertenecer a un deporte']
+
+  },
   status: {
     type: Boolean
   }
-
 })
 module.exports = mongoose.model('Round', RoundModel)
