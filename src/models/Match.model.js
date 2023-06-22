@@ -61,6 +61,12 @@ const MatchModel = new Schema({
     required: [true, 'Este campo es requerido']
 
   },
+  sport: {
+    type: mongoose.SchemaTypes.ObjectId,
+    ref: 'Sport',
+    required: [true, 'Este campo es requerido']
+
+  },
   status: {
     type: Boolean
   }
