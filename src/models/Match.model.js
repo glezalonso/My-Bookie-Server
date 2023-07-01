@@ -20,18 +20,12 @@ const MatchModel = new Schema({
       playerId: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Player'
-      },
-      player: {
-        type: String
       }
     }],
     away: [{
       playerId: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'Player'
-      },
-      player: {
-        type: String
       }
     }]
 
@@ -69,7 +63,11 @@ const MatchModel = new Schema({
   },
   status: {
     type: Boolean
-  }
+  },
+  comments: [{
+    username: String,
+    comment: String
+  }]
 })
 
 module.exports = mongoose.model('Match', MatchModel)

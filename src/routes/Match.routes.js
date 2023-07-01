@@ -1,21 +1,26 @@
 const express = require('express')
 const router = express.Router()
-const { getMatches, getMatch, createMatch, updateMatch, deleteMatch, addLineUp, removeLineUp, closeMatch } = require('../controllers/Match.controllers')
+const { getMatches, getMatch, createMatch, updateMatch, deleteMatch, addLineUp, removeLineUp, closeMatch, addComment, removeComment } = require('../controllers/Match.controllers')
+const { verifyToken } = require('../middlewares/verifyToken')
 
 router.get('/', getMatches)
 
 router.get('/:id', getMatch)
 
-router.post('/', createMatch)
+router.post('/', verifyToken, createMatch)
 
-router.put('/:id', updateMatch)
+router.put('/:id', verifyToken, updateMatch)
 
-router.delete('/:id', deleteMatch)
+router.delete('/:id', verifyToken, deleteMatch)
 
-router.post('/addlineup/:id', addLineUp)
+router.post('/addlineup/:id', verifyToken, addLineUp)
 
-router.delete('/removelineup/:id', removeLineUp)
+router.delete('/removelineup/:id', verifyToken, removeLineUp)
 
-router.put('/closematch/:id', closeMatch)
+router.put('/closematch/:id', verifyToken, closeMatch)
+
+router.put('/addComment/:id', verifyToken, addComment)
+
+router.put('/removeComment/:id', verifyToken, removeComment)
 
 module.exports = router

@@ -20,9 +20,6 @@ const TeamModel = new Schema({
     playerId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Player'
-    },
-    player: {
-      type: String
     }
   }
   ],

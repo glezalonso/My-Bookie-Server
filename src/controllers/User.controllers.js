@@ -29,7 +29,7 @@ const loginUser = async (req, res) => {
       if (!data) {
         res.status(501).json({ message: 'Usuario y/o contraseña no valida' })
       } else {
-        const token = jwt.sign({ userId: existUser._id, username: existUser.username }, process.env.MY_SECRET, { expiresIn: '24h' })
+        const token = jwt.sign({ userId: existUser._id, username: existUser.username }, process.env.SECURITY_BOOKIE, { expiresIn: '24h' })
         res.status(201).json({ token, username: existUser.username, isAdmin: existUser.isAdmin })
       }
     })
