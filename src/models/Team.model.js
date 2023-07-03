@@ -26,7 +26,14 @@ const TeamModel = new Schema({
   sport: {
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'Sport'
-  }
+  },
+  seasons: [
+    {
+      season: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Season'
+      }
+    }]
 })
 
 module.exports = mongoose.model('Team', TeamModel)

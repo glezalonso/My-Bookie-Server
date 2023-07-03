@@ -22,7 +22,23 @@ const SeasonModel = new Schema({
     ref: 'Sport',
     required: [true, 'La temporada debe pertenecer a un deporte']
 
-  }
+  },
+  standings: [
+    {
+      team: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Team'
+      },
+      wins: {
+        type: Number
+      },
+      draws: {
+        type: Number
+      },
+      loses: {
+        type: Number
+      }
+    }]
 })
 
 module.exports = mongoose.model('Season', SeasonModel)

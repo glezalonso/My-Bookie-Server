@@ -1,4 +1,5 @@
 const MatchModel = require('../models/Match.model')
+const SeasonModel = require('../models/Season.model')
 const ObjectId = require('mongoose').Types.ObjectId
 
 const getMatches = (req, res) => {
@@ -66,15 +67,64 @@ const deleteMatch = (req, res) => {
   }
 }
 
-const closeMatch = (req, res) => {
+const closeMatch = async (req, res) => {
   const { id } = req.params
   const { local, away } = req.body
-  if (ObjectId.isValid(id)) {
-    MatchModel.findOneAndUpdate({ _id: id }, { score: { local, away }, status: false }, { new: true })
-      .then(data => res.status(210).json(data))
-      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al cerrar el juego', error }))
-  } else {
-    res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
+
+  if (!ObjectId.isValid(id)) return res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
+  try {
+    const placeScore = await MatchModel.findOneAndUpdate({ _id: id }, { score: { local, away }, status: false }, { new: true })
+    const { local: localId, away: awayId, season: seasonId } = placeScore
+    if (local > away) {
+      await SeasonModel.updateOne(
+        {
+          _id: seasonId,
+          standings: { $elemMatch: { team: awayId } }
+        },
+        { $inc: { 'standings.$.loses': 1 } }
+      )
+      await SeasonModel.updateOne(
+        {
+          _id: seasonId,
+          standings: { $elemMatch: { team: localId } }
+        },
+        { $inc: { 'standings.$.wins': 1 } }
+      )
+    } else if (away > local) {
+      await SeasonModel.updateOne(
+        {
+          _id: seasonId,
+          standings: { $elemMatch: { team: localId } }
+        },
+        { $inc: { 'standings.$.loses': 1 } }
+      )
+      await SeasonModel.updateOne(
+        {
+          _id: seasonId,
+          standings: { $elemMatch: { team: awayId } }
+        },
+        { $inc: { 'standings.$.wins': 1 } }
+      )
+    } else {
+      await SeasonModel.updateOne(
+        {
+          _id: seasonId,
+          standings: { $elemMatch: { team: localId } }
+        },
+        { $inc: { 'standings.$.draws': 1 } }
+      )
+      await SeasonModel.updateOne(
+        {
+          _id: seasonId,
+          standings: { $elemMatch: { team: awayId } }
+        },
+        { $inc: { 'standings.$.draws': 1 } }
+      )
+    }
+    res.status(201).json(placeScore)
+  } catch (error) {
+    console.log(error)
+    res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion 2' })
   }
 }
 
