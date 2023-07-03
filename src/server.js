@@ -20,7 +20,7 @@ const app = express()
 // Middlewares
 dotenv.config({ path: 'src/.env' })
 app.use(express.json())
-app.use(cors({ origin: process.env.CLIENT, credentials: true }))
+app.use(cors({ origin: [process.env.CLIENT, process.env.LANDING], credentials: true }))
 app.use(morgan('tiny'))
 app.disable('x-powered-by')
 
