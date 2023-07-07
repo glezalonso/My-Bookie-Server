@@ -14,6 +14,8 @@ const seasonRoutes = require('./routes/Season.routes')
 const teamRoutes = require('./routes/Team.routes')
 const matchRoutes = require('./routes/Match.routes')
 const roundRoutes = require('./routes/Round.routes')
+const bookieRoutes = require('./routes/Bookie.routes')
+const newRoutes = require('./routes/New.routes')
 
 const app = express()
 
@@ -40,6 +42,8 @@ app.use('/api/seasons', seasonRoutes)
 app.use('/api/teams', teamRoutes)
 app.use('/api/matches', matchRoutes)
 app.use('/api/rounds', roundRoutes)
+app.use('/api/bookies', bookieRoutes)
+app.use('/api/news', newRoutes)
 app.get('/*', (req, res) => res.status(404).json({ message: 'Ruta no encontrada' }))
 
 // use routes Landing

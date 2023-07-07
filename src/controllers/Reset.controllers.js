@@ -50,6 +50,7 @@ const verifyOTP = (req, res) => {
 
 const resetPassword = async (req, res) => {
   const { password, OTP, email } = req.body
+  console.log(req.body)
   const passCrypt = await bcrypt.hash(password, 10)
   await UserModel.findOneAndUpdate({ email, OTP }, {
     password: passCrypt,

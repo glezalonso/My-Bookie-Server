@@ -149,7 +149,6 @@ const addLineUp = (req, res) => {
 const removeLineUp = (req, res) => {
   const { id } = req.params
   const { playerId, lineId, type } = req.body
-  console.log(req.body)
   if (ObjectId.isValid(id)) {
     if (type === 'local') {
       MatchModel.findOneAndUpdate({ _id: id }, { $pull: { lineup: { local: { playerId, _id: lineId } } } }, { new: true })
