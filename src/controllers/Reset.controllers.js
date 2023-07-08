@@ -1,12 +1,12 @@
 const otpGenerator = require('otp-generator')
-const UserModel = require('../models/User.model')
+const BookieModel = require('../models/Bookies.model')
 const nodemailer = require('nodemailer')
 const bcrypt = require('bcrypt')
 
 const generateOTP = (req, res) => {
   const { email } = req.body
   if (email) {
-    UserModel.findOne({ email })
+    BookieModel.findOne({ email })
       .then(data => {
         if (!data) {
           res.status(404).json({ message: 'El email no existe' })
@@ -29,8 +29,8 @@ const generateOTP = (req, res) => {
 
           transporter.sendMail(mailOptions, (err, response) => {
             if (!err) {
-              UserModel.findOneAndUpdate({ email }, { OTP })
-                .then(() => res.status(200).json({ message: 'Se ha enviado email' }))
+              BookieModel.findOneAndUpdate({ email }, { OTP })
+                .then(() => res.status(200).json(email))
                 .catch(error => res.status(500).json({ error }))
             }
           })
@@ -43,16 +43,15 @@ const generateOTP = (req, res) => {
 }
 const verifyOTP = (req, res) => {
   const { email, OTP } = req.body
-  UserModel.findOne({ email, OTP })
+  BookieModel.findOne({ email, OTP })
     .then(data => res.status(202).json(data.OTP))
     .catch(error => res.status(500).json({ message: 'Codigo incorrecto', error }))
 }
 
 const resetPassword = async (req, res) => {
   const { password, OTP, email } = req.body
-  console.log(req.body)
   const passCrypt = await bcrypt.hash(password, 10)
-  await UserModel.findOneAndUpdate({ email, OTP }, {
+  await BookieModel.findOneAndUpdate({ email, OTP }, {
     password: passCrypt,
     OTP: null
   }).then(() => res.status(202).json({ message: 'Contraseña cambiada con exito' }))
