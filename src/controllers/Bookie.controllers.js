@@ -40,7 +40,7 @@ const loginBookie = async (req, res) => {
     const verifyPass = await bcrypt.compare(password, existBookie.password)
     if (!verifyPass) return res.status(501).json({ error: 'Wrong Credentials' })
 
-    const token = jwt.sign({ username: existBookie.username }, process.env.SECURITY_BOOKIE, { expiresIn: '60s' })
+    const token = jwt.sign({ username: existBookie.username }, process.env.SECURITY_BOOKIE, { expiresIn: '24h' })
     res.status(201).json({ username: existBookie.username, token })
   } catch (error) {
     return res.status(501).json({ error: 'There was an error' })
