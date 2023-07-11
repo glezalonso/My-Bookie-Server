@@ -2,7 +2,7 @@ const NewModel = require('../models/New.models')
 const ObjectId = require('mongoose').Types.ObjectId
 
 const getNews = (req, res) => {
-  NewModel.find({}).populate('author sport')
+  NewModel.find({}).populate('author sport').sort({ date: 'desc' })
     .then(data => res.status(200).json(data))
     .catch(error => res.status(505).json({ message: 'Ha ocurrido un error al mostrar las nocticas' }, error))
 }
@@ -10,7 +10,7 @@ const getNews = (req, res) => {
 const getNew = (req, res) => {
   const { id } = req.params
   if (ObjectId.isValid(id)) {
-    NewModel.findOne({ _id: id }).populate('author sport')
+    NewModel.findOne({ _id: id }).populate('author sport').sort({ date: 'desc' })
       .then(data => res.status(200).json(data))
       .catch(error => res.status(505).json({ message: 'Ha ocurrido un error al mostrar la noticia' }, error))
   } else {

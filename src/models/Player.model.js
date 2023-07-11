@@ -4,8 +4,7 @@ const Schema = mongoose.Schema
 const PlayerModel = new Schema({
   fullName: {
     type: String,
-    required: [true, 'Proporcionar un nombre de usuario'],
-    unique: [true, 'El nombre de jugador ya existe']
+    required: [true, 'Proporcionar un nombre de usuario']
   },
   photo: {
     type: String
