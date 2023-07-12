@@ -10,10 +10,11 @@ const getMatches = (req, res) => {
 
 const getMatchesToday = (req, res) => {
   const date = new Date()
-  const year = date.toLocaleString('en-US', { year: 'numeric' })
-  const month = date.toLocaleString('en-US', { month: '2-digit' })
-  const day = date.toLocaleString('en-US', { day: '2-digit' })
+  const year = date.toLocaleDateString('en-US', { year: 'numeric' })
+  const month = date.toLocaleDateString('en-US', { month: '2-digit' })
+  const day = date.toLocaleDateString('en-US', { day: '2-digit' })
   const dateFormated = `${year}-${month}-${day}`
+  console.log(dateFormated)
   MatchModel.find({ date: { $regex: dateFormated, $options: 'i' } }).populate('round season league local away sport', { __v: 0 }).sort({ date: 'asc' })
     .then(data => res.status(200).json(data))
     .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
