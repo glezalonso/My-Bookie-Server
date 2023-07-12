@@ -5,7 +5,7 @@ const { verifyToken } = require('../middlewares/verifyToken')
 
 router.get('/', getMatches)
 
-router.get('/matchestoday', getMatchesToday)
+router.put('/matchestoday', getMatchesToday)
 
 router.get('/:id', getMatch)
 
