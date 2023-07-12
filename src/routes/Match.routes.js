@@ -1,9 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { getMatches, getMatch, createMatch, updateMatch, deleteMatch, addLineUp, removeLineUp, closeMatch, addComment, removeComment } = require('../controllers/Match.controllers')
+const { getMatches, getMatch, createMatch, updateMatch, deleteMatch, addLineUp, removeLineUp, closeMatch, addComment, removeComment, getMatchesToday } = require('../controllers/Match.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 
 router.get('/', getMatches)
+
+router.get('/matchestoday', getMatchesToday)
 
 router.get('/:id', getMatch)
 

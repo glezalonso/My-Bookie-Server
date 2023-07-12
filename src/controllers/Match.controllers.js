@@ -7,6 +7,17 @@ const getMatches = (req, res) => {
     .then(data => res.status(200).json(data))
     .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
 }
+
+const getMatchesToday = (req, res) => {
+  const date = new Date()
+  const year = date.toLocaleString('default', { year: 'numeric' })
+  const month = date.toLocaleString('default', { month: '2-digit' })
+  const day = date.toLocaleString('default', { day: '2-digit' })
+  const dateFormated = `${year}-${month}-${day}`
+  MatchModel.find({ date: { $regex: dateFormated, $options: 'i' } }).populate('round season league local away sport', { __v: 0 }).sort({ date: 'asc' })
+    .then(data => res.status(200).json(data))
+    .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
+}
 const getMatch = (req, res) => {
   const { id } = req.params
   if (ObjectId.isValid(id)) {
@@ -190,4 +201,4 @@ const removeComment = (req, res) => {
   }
 }
 
-module.exports = { getMatches, getMatch, createMatch, updateMatch, deleteMatch, addLineUp, removeLineUp, closeMatch, addComment, removeComment }
+module.exports = { getMatches, getMatch, createMatch, updateMatch, deleteMatch, addLineUp, removeLineUp, closeMatch, addComment, removeComment, getMatchesToday }
