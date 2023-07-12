@@ -94,4 +94,15 @@ const deleteTeam = (req, res) => {
   }
 }
 
-module.exports = { getTeams, getTeam, createTeam, addPlayer, removePlayer, updateTeam, deleteTeam }
+const getTeamBySport = (req, res) => {
+  const { sport } = req.body
+  if (ObjectId.isValid(sport)) {
+    TeamModel.find({ sport }).populate('players.playerId', { __v: 0, status: 0, photo: 0, sport: 0 }).populate('sport', { description: 0, poster: 0, __v: 0 })
+      .then(data => res.status(200).json(data))
+      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al cargar los equipos', error }))
+  } else {
+    res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
+  }
+}
+
+module.exports = { getTeams, getTeam, createTeam, addPlayer, removePlayer, updateTeam, deleteTeam, getTeamBySport }

@@ -8,12 +8,6 @@ const getMatches = (req, res) => {
     .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
 }
 
-const getMatchesToday = (req, res) => {
-  const { date } = req.body
-  MatchModel.find({ date: { $regex: date, $options: 'i' } }).populate('round season league local away sport', { __v: 0 }).sort({ date: 'asc' })
-    .then(data => res.status(200).json(data))
-    .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
-}
 const getMatch = (req, res) => {
   const { id } = req.params
   if (ObjectId.isValid(id)) {
@@ -197,4 +191,85 @@ const removeComment = (req, res) => {
   }
 }
 
-module.exports = { getMatches, getMatch, createMatch, updateMatch, deleteMatch, addLineUp, removeLineUp, closeMatch, addComment, removeComment, getMatchesToday }
+const getMatchesToday = (req, res) => {
+  const { date } = req.body
+  MatchModel.find({ date: { $regex: date, $options: 'i' } }).populate('round season league local away sport', { __v: 0 }).sort({ date: 'asc' })
+    .then(data => res.status(200).json(data))
+    .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
+}
+
+const getMatchesByLeague = (req, res) => {
+  const { league } = req.body
+  if (ObjectId.isValid(league)) {
+    MatchModel.find({ league }).populate('round season league local away sport', { __v: 0 }).sort({ date: 'asc' })
+      .then(data => res.status(200).json(data))
+      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
+  } else {
+    res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
+  }
+}
+
+const getMatchesByRound = (req, res) => {
+  const { round } = req.body
+  if (ObjectId.isValid(round)) {
+    MatchModel.find({ round }).populate('round season league local away sport', { __v: 0 }).sort({ date: 'asc' })
+      .then(data => res.status(200).json(data))
+      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
+  } else {
+    res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
+  }
+}
+
+const getMatchesBySeason = (req, res) => {
+  const { season } = req.body
+  if (ObjectId.isValid(season)) {
+    MatchModel.find({ season }).populate('round season league local away sport', { __v: 0 }).sort({ date: 'asc' })
+      .then(data => res.status(200).json(data))
+      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
+  } else {
+    res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
+  }
+}
+
+const getMatchesByTeam = (req, res) => {
+  const { team } = req.body
+  if (ObjectId.isValid(team)) {
+    MatchModel.find({ $or: [{ away: team }, { local: team }] }).populate('round season league local away sport', { __v: 0 }).sort({ date: 'asc' })
+      .then(data => res.status(200).json(data))
+      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
+  } else {
+    res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
+  }
+}
+
+const getMatchesOpen = (req, res) => {
+  MatchModel.find({ status: true }).populate('round season league local away sport', { __v: 0 }).sort({ date: 'asc' })
+    .then(data => res.status(200).json(data))
+    .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
+}
+
+const getMatchesClosed = (req, res) => {
+  MatchModel.find({ status: false }).populate('round season league local away sport', { __v: 0 }).sort({ date: 'asc' })
+    .then(data => res.status(200).json(data))
+    .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al mostrarlos juegos', error }))
+}
+
+module.exports = {
+  getMatches,
+  getMatch,
+  createMatch,
+  updateMatch,
+  deleteMatch,
+  addLineUp,
+  removeLineUp,
+  closeMatch,
+  addComment,
+  removeComment,
+  getMatchesToday,
+  getMatchesByLeague,
+  getMatchesByRound,
+  getMatchesBySeason,
+  getMatchesClosed,
+  getMatchesOpen,
+  getMatchesByTeam
+}

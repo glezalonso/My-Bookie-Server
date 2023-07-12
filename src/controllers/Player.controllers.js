@@ -60,5 +60,15 @@ const deletePlayer = (req, res) => {
     res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
   }
 }
+const getPlayerBySport = (req, res) => {
+  const { sport } = req.body
+  if (ObjectId.isValid(sport)) {
+    PlayerModel.find({ sport }).populate('sport team', { __v: 0, poster: 0, description: 0 })
+      .then(data => res.status(200).json(data))
+      .catch(error => res.status(501).json({ message: 'Ha ocurrido un error al cargar jugadores  ', error }))
+  } else {
+    res.status(501).json({ messsage: 'Ha ocurrido un error en la peticion' })
+  }
+}
 
-module.exports = { getPlayers, getPlayer, createPlayer, updatePlayer, deletePlayer }
+module.exports = { getPlayers, getPlayer, createPlayer, updatePlayer, deletePlayer, getPlayerBySport }

@@ -1,5 +1,5 @@
 const express = require('express')
-const { getTeams, getTeam, createTeam, addPlayer, removePlayer, deleteTeam, updateTeam } = require('../controllers/Team.controllers')
+const { getTeams, getTeam, createTeam, addPlayer, removePlayer, deleteTeam, updateTeam, getTeamBySport } = require('../controllers/Team.controllers')
 const router = express.Router()
 const { verifyToken } = require('../middlewares/verifyToken')
 
@@ -10,5 +10,6 @@ router.put('/:id', verifyToken, updateTeam)
 router.delete('/:id', verifyToken, deleteTeam)
 router.post('/addplayer/:id', verifyToken, addPlayer)
 router.delete('/removeplayer/:id', verifyToken, removePlayer)
+router.post('/teamsbysport', getTeamBySport)
 
 module.exports = router
