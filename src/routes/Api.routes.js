@@ -1,7 +1,11 @@
 const express = require('express')
 const router = express.Router()
 const { loginUser } = require('../controllers/User.controllers')
-const { generateOTP, verifyOTP, resetPassword } = require('../controllers/Reset.controllers')
+const {
+    generateOTP,
+    verifyOTP,
+    resetPassword,
+} = require('../controllers/Reset.controllers')
 const { loginBookie, register } = require('../controllers/Bookie.controllers')
 
 // path login, loginUser controller to validate login

@@ -2,7 +2,13 @@ const express = require('express')
 const router = express.Router()
 
 const { verifyToken } = require('../middlewares/verifyToken')
-const { getNews, getNew, createNew, updateNew, deleteNew } = require('../controllers/New.controller')
+const {
+    getNews,
+    getNew,
+    createNew,
+    updateNew,
+    deleteNew,
+} = require('../controllers/New.controller')
 
 router.get('/', getNews)
 router.get('/:id', getNew)

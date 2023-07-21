@@ -1,6 +1,26 @@
 const express = require('express')
 const router = express.Router()
-const { getMatches, getMatch, createMatch, updateMatch, deleteMatch, addLineUp, removeLineUp, closeMatch, addComment, removeComment, getMatchesToday, getMatchesByLeague, getMatchesByRound, getMatchesBySeason, getMatchesOpen, getMatchesClosed, getMatchesByTeam } = require('../controllers/Match.controllers')
+const {
+    getMatches,
+    getMatch,
+    createMatch,
+    updateMatch,
+    deleteMatch,
+    addLineUp,
+    removeLineUp,
+    closeMatch,
+    addComment,
+    removeComment,
+    getMatchesToday,
+    getMatchesByRound,
+    getMatchesBySeason,
+    getMatchesOpen,
+    getMatchesClosed,
+    getMatchesByTeam,
+    getNextMatchesBySport,
+    getMatchesOpenByLeague,
+    getMatchesClosedByLeague,
+} = require('../controllers/Match.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 
 router.get('/', getMatches)
@@ -26,7 +46,9 @@ router.put('/removeComment/:id', verifyToken, removeComment)
 // Extra endponints
 router.post('/matchestoday', getMatchesToday)
 
-router.post('/matchesbyleague', getMatchesByLeague)
+router.post('/matchesopenbyleague', getMatchesOpenByLeague)
+
+router.post('/matchesclosedbyleague', getMatchesClosedByLeague)
 
 router.post('/matchesbyround', getMatchesByRound)
 
@@ -37,5 +59,7 @@ router.post('/matchesteams', getMatchesByTeam)
 router.post('/matchesopen', getMatchesOpen)
 
 router.post('/matchesclosed', getMatchesClosed)
+
+router.post('/nextmatchesbysport', getNextMatchesBySport)
 
 module.exports = router

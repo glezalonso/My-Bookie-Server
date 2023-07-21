@@ -22,7 +22,16 @@ const app = express()
 // Middlewares
 dotenv.config({ path: 'src/.env' })
 app.use(express.json())
-app.use(cors({ origin: [process.env.CLIENT, process.env.LANDING], credentials: true }))
+app.use(
+    cors({
+        origin: [
+            process.env.CLIENT,
+            process.env.LANDING,
+            'http://localhost:5174',
+        ],
+        credentials: true,
+    })
+)
 app.use(morgan('tiny'))
 app.disable('x-powered-by')
 
@@ -44,19 +53,31 @@ app.use('/api/matches', matchRoutes)
 app.use('/api/rounds', roundRoutes)
 app.use('/api/bookies', bookieRoutes)
 app.use('/api/news', newRoutes)
-app.get('/*', (req, res) => res.status(404).json({ message: 'Ruta no encontrada' }))
+app.get('/*', (req, res) =>
+    res.status(404).json({ message: 'Ruta no encontrada' })
+)
 
 // use routes Landing
 
 // server listen when connection to database is already
 connection()
-  .then(() => {
-    try {
-      app.listen(app.get('port'), () => console.log(`${app.get('title')} esta corriendo por el puerto: ${app.get('port')}`))
-    } catch (error) {
-      console.log('No se podido acceder al servidor')
-    }
-  })
-  .catch((error) => console.log(`El servidor no se pudo conectar a la base de datos ${error}`))
+    .then(() => {
+        try {
+            app.listen(app.get('port'), () =>
+                console.log(
+                    `${app.get(
+                        'title'
+                    )} esta corriendo por el puerto: ${app.get('port')}`
+                )
+            )
+        } catch (error) {
+            console.log('No se podido acceder al servidor')
+        }
+    })
+    .catch((error) =>
+        console.log(
+            `El servidor no se pudo conectar a la base de datos ${error}`
+        )
+    )
 
 module.export = app

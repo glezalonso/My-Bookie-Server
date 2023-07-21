@@ -5,13 +5,20 @@
         "es2021": true,
         "node": true
     },
-    "extends": "standard",
-    "overrides": [
+    "extends": [
+        "standard",
+        "plugin:prettier/recommended"
     ],
+    "overrides": [],
     "parserOptions": {
         "ecmaVersion": "latest"
     },
     "rules": {
-        
+        "prettier/prettier": [
+            "error",
+            {
+                "endOfLine": "auto"
+            }
+        ]
     }
 }

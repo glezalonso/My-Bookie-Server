@@ -1,6 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const { createSport, getSports, getSport, updateSport, deleteSport } = require('../controllers/Sport.controllers')
+const {
+    createSport,
+    getSports,
+    getSport,
+    updateSport,
+    deleteSport,
+} = require('../controllers/Sport.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 
 router.get('/', getSports)

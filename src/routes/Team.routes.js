@@ -1,5 +1,14 @@
 const express = require('express')
-const { getTeams, getTeam, createTeam, addPlayer, removePlayer, deleteTeam, updateTeam, getTeamBySport } = require('../controllers/Team.controllers')
+const {
+    getTeams,
+    getTeam,
+    createTeam,
+    addPlayer,
+    removePlayer,
+    deleteTeam,
+    updateTeam,
+    getTeamBySport,
+} = require('../controllers/Team.controllers')
 const router = express.Router()
 const { verifyToken } = require('../middlewares/verifyToken')
 

@@ -1,6 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const { getUsers, getUser, registerUser, updateUser, deleteUser } = require('../controllers/User.controllers')
+const {
+    getUsers,
+    getUser,
+    registerUser,
+    updateUser,
+    deleteUser,
+} = require('../controllers/User.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 
 // path users/login, registerUser controller to register in database

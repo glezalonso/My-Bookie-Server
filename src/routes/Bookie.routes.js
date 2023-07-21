@@ -1,5 +1,10 @@
 const express = require('express')
-const { getBookies, getBookie, updateBookie, deleteBookie } = require('../controllers/Bookie.controllers')
+const {
+    getBookies,
+    getBookie,
+    updateBookie,
+    deleteBookie,
+} = require('../controllers/Bookie.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 const router = express.Router()
 
