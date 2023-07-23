@@ -74,6 +74,19 @@ const MatchModel = new Schema({
             comment: String,
         },
     ],
+    result: [
+        {
+            option: {
+                type: String,
+                required: [true, 'Este campo es requerido'],
+            },
+            user: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'User',
+                required: [true, 'Este campo es requerido'],
+            },
+        },
+    ],
 })
 
 module.exports = mongoose.model('Match', MatchModel)

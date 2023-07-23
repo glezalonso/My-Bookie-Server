@@ -475,6 +475,20 @@ const getNextMatchesBySport = (req, res) => {
         )
 }
 
+const pickem = (req, res) => {
+    const { option, username, match } = req.body
+    if (ObjectId.isValid(match)) {
+        MatchModel.findOneAndUpdate(
+            { _id: match },
+            { $push: { result: { option, username } } }
+        )
+    } else {
+        res.status(501).json({
+            messsage: 'Ha ocurrido un error en la peticion',
+        })
+    }
+}
+
 module.exports = {
     getMatches,
     getMatch,
@@ -495,4 +509,5 @@ module.exports = {
     getMatchesOpen,
     getMatchesByTeam,
     getNextMatchesBySport,
+    pickem,
 }

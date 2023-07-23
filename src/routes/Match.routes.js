@@ -20,6 +20,7 @@ const {
     getNextMatchesBySport,
     getMatchesOpenByLeague,
     getMatchesClosedByLeague,
+    pickem,
 } = require('../controllers/Match.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 
@@ -42,6 +43,8 @@ router.put('/closematch/:id', verifyToken, closeMatch)
 router.put('/addComment/:id', verifyToken, addComment)
 
 router.put('/removeComment/:id', verifyToken, removeComment)
+
+router.post('/pickem', verifyToken, pickem)
 
 // Extra endponints
 router.post('/matchestoday', getMatchesToday)

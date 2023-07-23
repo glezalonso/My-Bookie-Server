@@ -8,10 +8,12 @@ const {
     createNew,
     updateNew,
     deleteNew,
+    getNewsBySport,
 } = require('../controllers/New.controller')
 
 router.get('/', getNews)
 router.get('/:id', getNew)
+router.post('/newsbysport', getNewsBySport)
 router.post('/', verifyToken, createNew)
 router.put('/:id', verifyToken, updateNew)
 router.delete('/:id', verifyToken, deleteNew)

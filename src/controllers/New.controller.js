@@ -104,4 +104,33 @@ const deleteNew = (req, res) => {
     }
 }
 
-module.exports = { getNew, getNews, createNew, updateNew, deleteNew }
+const getNewsBySport = (req, res) => {
+    const { sport } = req.body
+    if (ObjectId.isValid(sport)) {
+        NewModel.find({ sport })
+            .populate('author sport')
+            .sort({ date: 'desc' })
+            .then((data) => res.status(200).json(data))
+            .catch((error) =>
+                res.status(505).json(
+                    {
+                        message: 'Ha ocurrido un error al mostrar la noticia',
+                    },
+                    error
+                )
+            )
+    } else {
+        res.status(501).json({
+            messsage: 'Ha ocurrido un error en la peticion',
+        })
+    }
+}
+
+module.exports = {
+    getNew,
+    getNews,
+    createNew,
+    updateNew,
+    deleteNew,
+    getNewsBySport,
+}
