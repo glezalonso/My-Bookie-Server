@@ -475,13 +475,35 @@ const getNextMatchesBySport = (req, res) => {
         )
 }
 
-const pickem = (req, res) => {
+const pickem = async (req, res) => {
     const { option, username, match } = req.body
+    console.log(req.body)
     if (ObjectId.isValid(match)) {
+        const existVote = MatchModel.findOneAndUpdate({
+            _id: match,
+            votes: { $elemMatch: { username } },
+        })
+        if (existVote)
+            return res
+                .status(500)
+                .json({ message: 'Ya se ha colocado su voto' })
+
         MatchModel.findOneAndUpdate(
             { _id: match },
-            { $push: { result: { option, username } } }
+            { $push: { votes: { username, option } } },
+            { new: true }
         )
+            .then(() =>
+                res.status(202).json({
+                    message: 'Se ha agregado el voto exitosamente',
+                })
+            )
+            .catch((error) =>
+                res.status(500).json({
+                    message: 'Ha ocurrido un error al agregar el voto',
+                    error,
+                })
+            )
     } else {
         res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',

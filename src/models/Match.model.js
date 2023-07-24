@@ -74,17 +74,10 @@ const MatchModel = new Schema({
             comment: String,
         },
     ],
-    result: [
+    votes: [
         {
-            option: {
-                type: String,
-                required: [true, 'Este campo es requerido'],
-            },
-            user: {
-                type: mongoose.SchemaTypes.ObjectId,
-                ref: 'User',
-                required: [true, 'Este campo es requerido'],
-            },
+            username: String,
+            option: String,
         },
     ],
 })

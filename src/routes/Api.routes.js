@@ -11,7 +11,7 @@ const { loginBookie, register } = require('../controllers/Bookie.controllers')
 // path login, loginUser controller to validate login
 router.post('/login', loginUser)
 // path generateOTP recovery email from opt code
-router.post('/generateOTP', generateOTP)
+router.post('/generateotp', generateOTP)
 // path  verifyOTP verifyOPT
 router.post('/verifyOTP', verifyOTP)
 // path resetPassword

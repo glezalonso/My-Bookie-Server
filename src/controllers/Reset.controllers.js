@@ -33,6 +33,7 @@ const generateOTP = (req, res) => {
 
                     transporter.sendMail(mailOptions, (err, response) => {
                         if (!err) {
+                            console.log(response)
                             BookieModel.findOneAndUpdate({ email }, { OTP })
                                 .then(() => res.status(200).json(email))
                                 .catch((error) =>
