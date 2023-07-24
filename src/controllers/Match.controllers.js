@@ -477,9 +477,9 @@ const getNextMatchesBySport = (req, res) => {
 
 const pickem = async (req, res) => {
     const { option, username, match } = req.body
-    console.log(req.body)
+
     if (ObjectId.isValid(match)) {
-        const existVote = MatchModel.findOneAndUpdate({
+        const existVote = await MatchModel.findOne({
             _id: match,
             votes: { $elemMatch: { username } },
         })
