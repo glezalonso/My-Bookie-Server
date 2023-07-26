@@ -3,6 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 const dotenv = require('dotenv')
+const compression = require('compression')
 
 // Routes
 const apiRoutes = require('./routes/Api.routes')
@@ -21,6 +22,7 @@ const app = express()
 
 // Middlewares
 dotenv.config({ path: 'src/.env' })
+app.use(compression())
 app.use(express.json())
 app.use(
     cors({
