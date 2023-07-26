@@ -34,11 +34,11 @@ const createSport = async (req, res) => {
     const { poster } = req.files
     if (poster) {
         try {
-            const { url } = await upload(poster.tempFilePath)
+            const { secure_url } = await upload(poster.tempFilePath)
             const newSport = new SportModel({
                 sport,
                 description,
-                poster: url,
+                poster: secure_url,
             })
             newSport
                 .save()
@@ -78,13 +78,13 @@ const updateSport = async (req, res) => {
     const { poster } = req.files
     if (poster) {
         try {
-            const { url } = await upload(poster.tempFilePath)
+            const { secure_url } = await upload(poster.tempFilePath)
             SportModel.findOneAndUpdate(
                 { _id: id },
                 {
                     sport,
                     description,
-                    poster: url,
+                    poster: secure_url,
                 },
                 { new: true }
             ).then((data) => res.status(200).json(data))
