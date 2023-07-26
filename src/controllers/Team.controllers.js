@@ -1,6 +1,7 @@
 const PlayerModel = require('../models/Player.model')
 const TeamModel = require('../models/Team.model')
 const ObjectId = require('mongoose').Types.ObjectId
+const { upload } = require('../libs/cloudinary')
 
 const getTeams = (req, res) => {
     TeamModel.find({})
@@ -40,24 +41,50 @@ const getTeam = (req, res) => {
     }
 }
 
-const createTeam = (req, res) => {
-    const { name, poster, stadium, status, sport } = req.body
-    const newTeam = new TeamModel({
-        name,
-        poster,
-        stadium,
-        status,
-        sport,
-    })
-    newTeam
-        .save()
-        .then((data) => res.status(200).json(data))
-        .catch((error) =>
-            res.status(505).json({
-                message: 'Ha ocurrido un error al crear el equipo',
-                error,
+const createTeam = async (req, res) => {
+    const { name, stadium, status, sport } = req.body
+    const { poster } = req.files
+    if (poster) {
+        try {
+            const { secure_url } = await upload(poster.tempFilePath)
+            const newTeam = new TeamModel({
+                name,
+                poster: secure_url,
+                stadium,
+                status,
+                sport,
             })
-        )
+            newTeam
+                .save()
+                .then((data) => res.status(200).json(data))
+                .catch((error) =>
+                    res.status(505).json({
+                        message: 'Ha ocurrido un error al crear el equipo',
+                        error,
+                    })
+                )
+        } catch (error) {
+            console.log(error)
+            res.status(501).json({ message: 'Hubo un error en la petición' })
+        }
+    } else {
+        const newTeam = new TeamModel({
+            name,
+            poster,
+            stadium,
+            status,
+            sport,
+        })
+        newTeam
+            .save()
+            .then((data) => res.status(200).json(data))
+            .catch((error) =>
+                res.status(505).json({
+                    message: 'Ha ocurrido un error al crear el equipo',
+                    error,
+                })
+            )
+    }
 }
 
 const addPlayer = (req, res) => {
@@ -132,10 +159,39 @@ const removePlayer = (req, res) => {
     }
 }
 
-const updateTeam = (req, res) => {
+const updateTeam = async (req, res) => {
     const { id } = req.params
-    const { name, poster, stadium, status, sport } = req.body
-    if (ObjectId.isValid(id)) {
+    const { name, stadium, status, sport } = req.body
+    const { poster } = req.files
+    if (poster) {
+        try {
+            const { secure_url } = await upload(poster.tempFilePath)
+            TeamModel.findOneAndUpdate(
+                { _id: id },
+                {
+                    name,
+                    poster: secure_url,
+                    stadium,
+                    status,
+                    sport,
+                },
+                { new: true }
+            )
+                .then((data) => res.status(200).json(data))
+                .catch((error) =>
+                    res.status(501).json({
+                        message:
+                            'Ha ocurrido un error al tratar de actualizar equipo',
+                        error,
+                    })
+                )
+        } catch (error) {
+            res.status(501).json({
+                message: 'Hubo un error en la petición',
+                error,
+            })
+        }
+    } else {
         TeamModel.findOneAndUpdate(
             { _id: id },
             {
@@ -155,8 +211,6 @@ const updateTeam = (req, res) => {
                     error,
                 })
             )
-    } else {
-        res.status(501).json({ message: 'Hubo un error en la petición' })
     }
 }
 

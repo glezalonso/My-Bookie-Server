@@ -17,11 +17,18 @@ const matchRoutes = require('./routes/Match.routes')
 const roundRoutes = require('./routes/Round.routes')
 const bookieRoutes = require('./routes/Bookie.routes')
 const newRoutes = require('./routes/New.routes')
+const fileUpload = require('express-fileupload')
 
 const app = express()
 
 // Middlewares
 dotenv.config({ path: 'src/.env' })
+app.use(
+    fileUpload({
+        useTempFiles: true,
+        tempFileDir: './upload',
+    })
+)
 app.use(compression())
 app.use(express.json())
 app.use(
