@@ -178,7 +178,8 @@ const getSeasonsBySport = (req, res) => {
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(501).json({
-                message: 'Ha ocurrido un error al mostrar las temporadas 1',
+                message:
+                    'Ha ocurrido un error al mostrar las temporadas por deporte',
                 error,
             })
         )
@@ -190,7 +191,20 @@ const getSeasonsByLeague = (req, res) => {
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(501).json({
-                message: 'Ha ocurrido un error al mostrar las temporadas 1',
+                message:
+                    'Ha ocurrido un error al mostrar las temporadas por liga',
+                error,
+            })
+        )
+}
+const getSeasonsOpen = (req, res) => {
+    SeasonModel.find({ status: true })
+        .populate('league sport standings.team')
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message:
+                    'Ha ocurrido un error al mostrar las temporadas abiertas',
                 error,
             })
         )
@@ -206,4 +220,5 @@ module.exports = {
     removeTeam,
     getSeasonsBySport,
     getSeasonsByLeague,
+    getSeasonsOpen,
 }

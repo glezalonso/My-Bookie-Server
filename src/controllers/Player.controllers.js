@@ -117,6 +117,24 @@ const getPlayerBySport = (req, res) => {
         })
     }
 }
+const getPlayersTeamless = (req, res) => {
+    const { sport } = req.body
+    if (ObjectId.isValid(sport)) {
+        PlayerModel.find({ sport, team: null })
+            .populate('sport team', { __v: 0, poster: 0, description: 0 })
+            .then((data) => res.status(200).json(data))
+            .catch((error) =>
+                res.status(501).json({
+                    message: 'Ha ocurrido un error al cargar jugadores  ',
+                    error,
+                })
+            )
+    } else {
+        res.status(501).json({
+            messsage: 'Ha ocurrido un error en la peticion',
+        })
+    }
+}
 
 module.exports = {
     getPlayers,
@@ -125,4 +143,5 @@ module.exports = {
     updatePlayer,
     deletePlayer,
     getPlayerBySport,
+    getPlayersTeamless,
 }
