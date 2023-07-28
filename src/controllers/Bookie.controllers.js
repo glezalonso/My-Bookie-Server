@@ -52,7 +52,7 @@ const loginBookie = async (req, res) => {
         const token = jwt.sign(
             { username: existBookie.username },
             process.env.SECURITY_BOOKIE,
-            { expiresIn: '24h' }
+            { expiresIn: '7d' }
         )
         res.status(201).json({ username: existBookie.username, token })
     } catch (error) {
