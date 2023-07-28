@@ -29,7 +29,7 @@ const register = async (req, res) => {
         const token = jwt.sign(
             { username: registerBookie.username },
             process.env.SECURITY_BOOKIE,
-            { expiresIn: '24h' }
+            { expiresIn: '7d' }
         )
 
         res.status(201).json({ username: registerBookie.username, token })

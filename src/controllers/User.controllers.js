@@ -48,7 +48,7 @@ const loginUser = async (req, res) => {
                 const token = jwt.sign(
                     { userId: existUser._id, username: existUser.username },
                     process.env.SECURITY_BOOKIE,
-                    { expiresIn: '24h' }
+                    { expiresIn: '7d' }
                 )
                 res.status(201).json({
                     token,
