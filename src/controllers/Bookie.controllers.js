@@ -9,11 +9,11 @@ const register = async (req, res) => {
     try {
         const exitEmail = await BookieModel.findOne({ email })
         if (exitEmail)
-            return res.status(501).json({ error: 'Email already exist' })
+            return res.status(501).json({ error: 'El email ya esta en uso' })
 
         const exitUsername = await BookieModel.findOne({ username })
         if (exitUsername)
-            return res.status(501).json({ error: 'username already exist' })
+            return res.status(501).json({ error: 'El usuario ya esta en uso' })
 
         const passwordHash = await bcrypt.hash(password, 10)
 
@@ -25,7 +25,7 @@ const register = async (req, res) => {
         })
         registerBookie.save()
         if (!registerBookie)
-            return res.status(501).json({ error: 'There was an error' })
+            return res.status(501).json({ error: 'Ha ocurrido un error' })
         const token = jwt.sign(
             { username: registerBookie.username },
             process.env.SECURITY_BOOKIE,
@@ -34,7 +34,7 @@ const register = async (req, res) => {
 
         res.status(201).json({ username: registerBookie.username, token })
     } catch (error) {
-        return res.status(501).json({ error: 'There was an error' })
+        return res.status(501).json({ error: 'Ha ocurrido un error' })
     }
 }
 
@@ -43,11 +43,11 @@ const loginBookie = async (req, res) => {
     try {
         const existBookie = await BookieModel.findOne({ username })
         if (!existBookie)
-            return res.status(501).json({ error: 'Wrong Credentials' })
+            return res.status(501).json({ error: 'Credenciales incorrectas' })
 
         const verifyPass = await bcrypt.compare(password, existBookie.password)
         if (!verifyPass)
-            return res.status(501).json({ error: 'Wrong Credentials' })
+            return res.status(501).json({ error: 'Credenciales incorrectas' })
 
         const token = jwt.sign(
             { username: existBookie.username },
@@ -56,7 +56,7 @@ const loginBookie = async (req, res) => {
         )
         res.status(201).json({ username: existBookie.username, token })
     } catch (error) {
-        return res.status(501).json({ error: 'There was an error' })
+        return res.status(501).json({ error: 'Ha ocurrido un error' })
     }
 }
 

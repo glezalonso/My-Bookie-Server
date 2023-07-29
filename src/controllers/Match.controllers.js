@@ -1,5 +1,6 @@
 const MatchModel = require('../models/Match.model')
 const SeasonModel = require('../models/Season.model')
+const BookiesModel = require('../models/Bookies.model')
 const ObjectId = require('mongoose').Types.ObjectId
 
 const getMatches = (req, res) => {
@@ -493,6 +494,13 @@ const pickem = async (req, res) => {
             { $push: { votes: { username, option } } },
             { new: true }
         )
+            .then(async () => {
+                await BookiesModel.findOneAndUpdate(
+                    { username },
+                    { $push: { votes: { match, option } } },
+                    { new: true }
+                )
+            })
             .then(() =>
                 res.status(202).json({
                     message: 'Se ha agregado el voto exitosamente',

@@ -21,6 +21,15 @@ const bookieSchema = new Schema({
     },
     avatar: String,
     OTP: String,
+    votes: [
+        {
+            match: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Match',
+            },
+            option: String,
+        },
+    ],
 })
 
 module.exports = mongoose.model('Bookie', bookieSchema)
