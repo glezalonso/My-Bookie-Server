@@ -48,7 +48,7 @@ router.put('/removeComment/:id', verifyToken, removeComment)
 
 router.post('/pickem', verifyToken, pickem)
 
-// Extra endponints
+// Extra endpoints
 router.get(`/matchbookieclosed/:username`, verifyToken, getMatchBookieClosed)
 
 router.put(`/matchbookieopen/:username`, verifyToken, getMatchBookieOpen)
