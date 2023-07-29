@@ -519,6 +519,21 @@ const pickem = async (req, res) => {
     }
 }
 
+const getMatchBookie = (req, res) => {
+    const { username } = req.params
+    MatchModel.find({ votes: { $elemMatch: { username } }, status: false })
+        .populate('round season league local away sport', { __v: 0 })
+        .sort({ date: 'desc' })
+        .limit('15')
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
+}
+
 module.exports = {
     getMatches,
     getMatch,
@@ -540,4 +555,5 @@ module.exports = {
     getMatchesByTeam,
     getNextMatchesBySport,
     pickem,
+    getMatchBookie,
 }

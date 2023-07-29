@@ -136,6 +136,19 @@ const deleteBookie = (req, res) => {
     }
 }
 
+const getBookiePicks = (req, res) => {
+    const { username } = req.params
+    BookieModel.findOne({ username })
+        .populate('votes.match')
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(500).json({
+                message: 'Ha ocurrido un error al mostar los bookies',
+                error,
+            })
+        )
+}
+
 module.exports = {
     loginBookie,
     register,
@@ -143,4 +156,5 @@ module.exports = {
     getBookie,
     updateBookie,
     deleteBookie,
+    getBookiePicks,
 }
