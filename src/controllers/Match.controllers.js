@@ -5,9 +5,12 @@ const ObjectId = require('mongoose').Types.ObjectId
 
 const getMatches = (req, res) => {
     MatchModel.find({})
-        .populate('round season league local away sport votes.username', {
-            __v: 0,
-        })
+        .populate(
+            'round season league local away sport votes.username comments.username',
+            {
+                __v: 0,
+            }
+        )
         .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -23,7 +26,7 @@ const getMatch = (req, res) => {
     if (ObjectId.isValid(id)) {
         MatchModel.findOne({ _id: id })
             .populate(
-                'round season league local away sport lineup.local.playerId lineup.away.playerId votes.username',
+                'round season league local away sport lineup.local.playerId lineup.away.playerId votes.username comments.username',
                 { __v: 0 }
             )
             .sort({ date: 'asc' })
