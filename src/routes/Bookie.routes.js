@@ -11,7 +11,7 @@ const router = express.Router()
 
 router.get('/', verifyToken, getBookies)
 router.get('/:id', verifyToken, getBookie)
-router.get('/picks/:username', getBookiePicks)
+router.get('/picks/:id', getBookiePicks)
 router.put('/:id', verifyToken, updateBookie)
 router.delete('/:id', verifyToken, deleteBookie)
 

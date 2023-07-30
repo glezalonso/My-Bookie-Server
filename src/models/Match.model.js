@@ -70,14 +70,24 @@ const MatchModel = new Schema({
     },
     comments: [
         {
-            username: String,
-            comment: String,
+            username: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Bookie',
+            },
+            comment: {
+                type: String,
+            },
         },
     ],
     votes: [
         {
-            username: String,
-            option: String,
+            username: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Bookie',
+            },
+            option: {
+                type: String,
+            },
         },
     ],
 })

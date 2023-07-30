@@ -5,7 +5,9 @@ const ObjectId = require('mongoose').Types.ObjectId
 
 const getMatches = (req, res) => {
     MatchModel.find({})
-        .populate('round season league local away sport', { __v: 0 })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
         .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -21,7 +23,7 @@ const getMatch = (req, res) => {
     if (ObjectId.isValid(id)) {
         MatchModel.findOne({ _id: id })
             .populate(
-                'round season league local away sport lineup.local.playerId lineup.away.playerId',
+                'round season league local away sport lineup.local.playerId lineup.away.playerId votes.username',
                 { __v: 0 }
             )
             .sort({ date: 'asc' })
@@ -266,12 +268,12 @@ const removeLineUp = (req, res) => {
 
 const addComment = (req, res) => {
     const { id } = req.params
-    const { username, comment } = req.body
+    const { userId, comment } = req.body
 
     if (ObjectId.isValid(id)) {
         MatchModel.findOneAndUpdate(
             { _id: id },
-            { $push: { comments: { username, comment } } },
+            { $push: { comments: { username: userId, comment } } },
             { new: true }
         )
             .then(() =>
@@ -294,12 +296,16 @@ const addComment = (req, res) => {
 
 const removeComment = (req, res) => {
     const { id } = req.params
-    const { username, comment, commentId } = req.body
+    const { userId, comment, commentId } = req.body
 
     if (ObjectId.isValid(id)) {
         MatchModel.findOneAndUpdate(
             { _id: id },
-            { $pull: { comments: { username, comment, _id: commentId } } },
+            {
+                $pull: {
+                    comments: { username: userId, comment, _id: commentId },
+                },
+            },
             { new: true }
         )
             .then(() =>
@@ -324,7 +330,7 @@ const getMatchesToday = (req, res) => {
     const { date } = req.body
     MatchModel.find({ date: { $regex: date, $options: 'i' } })
         .populate(
-            'round season league local away sport lineup.local.playerId lineup.away.playerId',
+            'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username',
             { __v: 0 }
         )
         .sort({ date: 'asc' })
@@ -341,7 +347,9 @@ const getMatchesOpenByLeague = (req, res) => {
     const { league } = req.body
     if (ObjectId.isValid(league)) {
         MatchModel.find({ league, status: true })
-            .populate('round season league local away sport', { __v: 0 })
+            .populate('round season league local away sport votes.username', {
+                __v: 0,
+            })
             .sort({ date: 'asc' })
             .then((data) => res.status(200).json(data))
             .catch((error) =>
@@ -361,7 +369,9 @@ const getMatchesClosedByLeague = (req, res) => {
     const { league } = req.body
     if (ObjectId.isValid(league)) {
         MatchModel.find({ league, status: false })
-            .populate('round season league local away sport', { __v: 0 })
+            .populate('round season league local away sport votes.username', {
+                __v: 0,
+            })
             .sort({ date: 'asc' })
             .then((data) => res.status(200).json(data))
             .catch((error) =>
@@ -381,7 +391,9 @@ const getMatchesByRound = (req, res) => {
     const { round } = req.body
     if (ObjectId.isValid(round)) {
         MatchModel.find({ round })
-            .populate('round season league local away sport', { __v: 0 })
+            .populate('round season league local away sport votes.username', {
+                __v: 0,
+            })
             .sort({ date: 'asc' })
             .then((data) => res.status(200).json(data))
             .catch((error) =>
@@ -401,7 +413,9 @@ const getMatchesBySeason = (req, res) => {
     const { season } = req.body
     if (ObjectId.isValid(season)) {
         MatchModel.find({ season })
-            .populate('round season league local away sport', { __v: 0 })
+            .populate('round season league local away sport votes.username', {
+                __v: 0,
+            })
             .sort({ date: 'asc' })
             .then((data) => res.status(200).json(data))
             .catch((error) =>
@@ -421,7 +435,9 @@ const getMatchesByTeam = (req, res) => {
     const { team } = req.body
     if (ObjectId.isValid(team)) {
         MatchModel.find({ $or: [{ away: team }, { local: team }] })
-            .populate('round season league local away sport', { __v: 0 })
+            .populate('round season league local away sport votes.username', {
+                __v: 0,
+            })
             .sort({ date: 'asc' })
             .then((data) => res.status(200).json(data))
             .catch((error) =>
@@ -439,7 +455,9 @@ const getMatchesByTeam = (req, res) => {
 
 const getMatchesOpen = (req, res) => {
     MatchModel.find({ status: true })
-        .populate('round season league local away sport', { __v: 0 })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
         .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -452,7 +470,9 @@ const getMatchesOpen = (req, res) => {
 
 const getMatchesClosed = (req, res) => {
     MatchModel.find({ status: false })
-        .populate('round season league local away sport', { __v: 0 })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
         .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -465,7 +485,9 @@ const getMatchesClosed = (req, res) => {
 const getNextMatchesBySport = (req, res) => {
     const { sport } = req.body
     MatchModel.find({ sport, status: true })
-        .populate('round season league local away sport', { __v: 0 })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
         .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -477,12 +499,12 @@ const getNextMatchesBySport = (req, res) => {
 }
 
 const pickem = async (req, res) => {
-    const { option, username, match } = req.body
+    const { option, userId, match } = req.body
 
     if (ObjectId.isValid(match)) {
         const existVote = await MatchModel.findOne({
             _id: match,
-            votes: { $elemMatch: { username } },
+            votes: { $elemMatch: { username: userId } },
         })
         if (existVote)
             return res
@@ -491,12 +513,12 @@ const pickem = async (req, res) => {
 
         MatchModel.findOneAndUpdate(
             { _id: match },
-            { $push: { votes: { username, option } } },
+            { $push: { votes: { username: userId, option } } },
             { new: true }
         )
             .then(async () => {
                 await BookiesModel.findOneAndUpdate(
-                    { username },
+                    { _id: userId },
                     { $push: { votes: { match, option } } },
                     { new: true }
                 )
@@ -520,9 +542,14 @@ const pickem = async (req, res) => {
 }
 
 const getMatchBookieClosed = (req, res) => {
-    const { username } = req.params
-    MatchModel.find({ votes: { $elemMatch: { username } }, status: false })
-        .populate('round season league local away sport', { __v: 0 })
+    const { id } = req.params
+    MatchModel.find({
+        votes: { $elemMatch: { username: id } },
+        status: false,
+    })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
         .sort({ date: 'desc' })
         .limit('15')
         .then((data) => res.status(200).json(data))
@@ -534,9 +561,14 @@ const getMatchBookieClosed = (req, res) => {
         )
 }
 const getMatchBookieOpen = (req, res) => {
-    const { username } = req.params
-    MatchModel.find({ votes: { $elemMatch: { username } }, status: true })
-        .populate('round season league local away sport', { __v: 0 })
+    const { id } = req.params
+    MatchModel.find({
+        votes: { $elemMatch: { username: id } },
+        status: true,
+    })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
         .sort({ date: 'desc' })
         .limit('15')
         .then((data) => res.status(200).json(data))

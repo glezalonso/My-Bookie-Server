@@ -32,7 +32,11 @@ const register = async (req, res) => {
             { expiresIn: '7d' }
         )
 
-        res.status(201).json({ username: registerBookie.username, token })
+        res.status(201).json({
+            username: registerBookie.username,
+            id: registerBookie._id,
+            token,
+        })
     } catch (error) {
         return res.status(501).json({ error: 'Ha ocurrido un error' })
     }
@@ -54,7 +58,11 @@ const loginBookie = async (req, res) => {
             process.env.SECURITY_BOOKIE,
             { expiresIn: '7d' }
         )
-        res.status(201).json({ username: existBookie.username, token })
+        res.status(201).json({
+            username: existBookie.username,
+            id: existBookie._id,
+            token,
+        })
     } catch (error) {
         return res.status(501).json({ error: 'Ha ocurrido un error' })
     }
