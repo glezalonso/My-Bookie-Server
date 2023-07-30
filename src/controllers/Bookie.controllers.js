@@ -83,6 +83,7 @@ const getBookie = (req, res) => {
     const { id } = req.params
     if (ObjectId.isValid(id)) {
         BookieModel.findOne({ _id: id })
+            .populate('followers.username follow.username')
             .then((data) => res.status(200).json(data))
             .catch((error) =>
                 res.status(500).json({
@@ -157,6 +158,62 @@ const getBookiePicks = (req, res) => {
         )
 }
 
+const addFollower = async (req, res) => {
+    const { id } = req.params
+    const { follower } = req.body
+    BookieModel.findOneAndUpdate(
+        { _id: id },
+        { $push: { followers: { username: follower } } }
+    )
+        .then(async () => {
+            await BookieModel.findOneAndUpdate(
+                { _id: follower },
+                { $push: { follow: { username: id } } },
+                { new: true }
+            )
+        })
+        .then(() =>
+            res.status(202).json({
+                message: 'Estas siguiendo exitosamente',
+            })
+        )
+        .catch((error) =>
+            res.status(500).json({
+                message: 'Ha ocurrido un error al seguir al usuario',
+                error,
+            })
+        )
+}
+
+const removeFollower = (req, res) => {
+    const { id } = req.params
+    const { follower } = req.body
+    console.log(req.params)
+    console.log(req.body)
+    BookieModel.findOneAndUpdate(
+        { _id: id },
+        { $pull: { followers: { username: follower } } }
+    )
+        .then(async () => {
+            await BookieModel.findOneAndUpdate(
+                { _id: follower },
+                { $pull: { follow: { username: id } } },
+                { new: true }
+            )
+        })
+        .then(() =>
+            res.status(202).json({
+                message: 'Estas siguiendo exitosamente',
+            })
+        )
+        .catch((error) =>
+            res.status(500).json({
+                message: 'Ha ocurrido un error al seguir al usuario',
+                error,
+            })
+        )
+}
+
 module.exports = {
     loginBookie,
     register,
@@ -165,4 +222,6 @@ module.exports = {
     updateBookie,
     deleteBookie,
     getBookiePicks,
+    addFollower,
+    removeFollower,
 }

@@ -30,14 +30,22 @@ const bookieSchema = new Schema({
             option: String,
         },
     ],
-    followers: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Bookie',
-    },
-    follow: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Bookie',
-    },
+    followers: [
+        {
+            username: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Bookie',
+            },
+        },
+    ],
+    follow: [
+        {
+            username: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Bookie',
+            },
+        },
+    ],
 })
 
 module.exports = mongoose.model('Bookie', bookieSchema)

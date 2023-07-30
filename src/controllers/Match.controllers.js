@@ -516,8 +516,7 @@ const pickem = async (req, res) => {
 
         MatchModel.findOneAndUpdate(
             { _id: match },
-            { $push: { votes: { username: userId, option } } },
-            { new: true }
+            { $push: { votes: { username: userId, option } } }
         )
             .then(async () => {
                 await BookiesModel.findOneAndUpdate(
