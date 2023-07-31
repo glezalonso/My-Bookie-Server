@@ -571,7 +571,7 @@ const getMatchBookieOpen = (req, res) => {
         .populate('round season league local away sport votes.username', {
             __v: 0,
         })
-        .sort({ date: 'desc' })
+        .sort({ date: 'asc' })
         .limit('15')
         .then((data) => res.status(200).json(data))
         .catch((error) =>
