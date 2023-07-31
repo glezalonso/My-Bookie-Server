@@ -16,6 +16,6 @@ router.get('/:id', verifyToken, getBookie)
 router.get('/picks/:id', verifyToken, getBookiePicks)
 router.put('/:id', verifyToken, updateBookie)
 router.delete('/:id', verifyToken, deleteBookie)
-router.put('/follow/:id', verifyToken, addFollower)
-router.delete('/follow/:id', verifyToken, removeFollower)
+router.post('/follow/:id', verifyToken, addFollower)
+router.put('/follow/:id', verifyToken, removeFollower)
 module.exports = router

@@ -32,18 +32,15 @@ const bookieSchema = new Schema({
     ],
     followers: [
         {
-            username: {
-                type: mongoose.SchemaTypes.ObjectId,
-                ref: 'Bookie',
-            },
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: 'Bookie',
         },
     ],
+
     follow: [
         {
-            username: {
-                type: mongoose.SchemaTypes.ObjectId,
-                ref: 'Bookie',
-            },
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: 'Bookie',
         },
     ],
 })
