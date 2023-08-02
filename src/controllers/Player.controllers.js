@@ -3,7 +3,7 @@ const ObjectId = require('mongoose').Types.ObjectId
 
 const getPlayers = (req, res) => {
     PlayerModel.find({})
-        .populate('sport team', { __v: 0, poster: 0, description: 0 })
+        .populate('sport team', { __v: 0, description: 0 })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(501).json({
@@ -17,7 +17,7 @@ const getPlayer = (req, res) => {
     const { id } = req.params
     if (ObjectId.isValid(id)) {
         PlayerModel.findOne({ _id: id })
-            .populate('sport team', { __v: 0, poster: 0, description: 0 })
+            .populate('sport team', { __v: 0, description: 0 })
             .then((data) => res.status(200).json(data))
             .catch((error) =>
                 res.status(501).json({

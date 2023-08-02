@@ -353,6 +353,7 @@ const getMatchesOpenByLeague = (req, res) => {
             .populate('round season league local away sport votes.username', {
                 __v: 0,
             })
+            .limit('100')
             .sort({ date: 'asc' })
             .then((data) => res.status(200).json(data))
             .catch((error) =>
@@ -374,7 +375,9 @@ const getMatchesClosedByLeague = (req, res) => {
         MatchModel.find({ league, status: false })
             .populate('round season league local away sport votes.username', {
                 __v: 0,
+                password: 0,
             })
+            .limit('100')
             .sort({ date: 'asc' })
             .then((data) => res.status(200).json(data))
             .catch((error) =>
@@ -461,6 +464,7 @@ const getMatchesOpen = (req, res) => {
         .populate('round season league local away sport votes.username', {
             __v: 0,
         })
+        .limit('100')
         .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -476,6 +480,7 @@ const getMatchesClosed = (req, res) => {
         .populate('round season league local away sport votes.username', {
             __v: 0,
         })
+        .limit('100')
         .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -491,6 +496,7 @@ const getNextMatchesBySport = (req, res) => {
         .populate('round season league local away sport votes.username', {
             __v: 0,
         })
+        .limit('100')
         .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
