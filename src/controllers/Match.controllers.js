@@ -550,8 +550,9 @@ const pickem = async (req, res) => {
 }
 
 const getMatchBookieClosed = (req, res) => {
-    const { id } = req.params
+    const { id, date } = req.params
     MatchModel.find({
+        date: { $regex: date, $options: 'i' },
         votes: { $elemMatch: { username: id } },
         status: false,
     })
@@ -559,7 +560,7 @@ const getMatchBookieClosed = (req, res) => {
             __v: 0,
         })
         .sort({ date: 'desc' })
-        .limit('15')
+
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(501).json({
