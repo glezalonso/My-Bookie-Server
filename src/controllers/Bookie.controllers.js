@@ -189,8 +189,7 @@ const addFollower = async (req, res) => {
 const removeFollower = (req, res) => {
     const { id } = req.params
     const { follower } = req.body
-    console.log(req.params)
-    console.log(req.body)
+
     BookieModel.findOneAndUpdate(
         { _id: id },
         { $pull: { followers: follower } }
@@ -216,6 +215,24 @@ const removeFollower = (req, res) => {
         )
 }
 
+const addAvatar = (req, res) => {
+    const { id } = req.params
+    const { avatar } = req.body
+    BookieModel.findOneAndUpdate({ _id: id }, { avatar }, { new: true })
+
+        .then((data) => {
+            res.status(202).json({
+                message: 'Estas siguiendo exitosamente',
+            })
+        })
+        .catch((error) =>
+            res.status(500).json({
+                message: 'Ha ocurrido un error al seguir al usuario',
+                error,
+            })
+        )
+}
+
 module.exports = {
     loginBookie,
     register,
@@ -226,4 +243,5 @@ module.exports = {
     getBookiePicks,
     addFollower,
     removeFollower,
+    addAvatar,
 }
