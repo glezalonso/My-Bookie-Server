@@ -69,8 +69,8 @@ const loginBookie = async (req, res) => {
 }
 
 const getBookies = (req, res) => {
-    BookieModel.find({})
-        .populate('followers follow', { password: 0 })
+    BookieModel.find({}, { password: 0, __v: 0, email: 0, fullName: 0 })
+        .populate('followers follow')
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(500).json({
@@ -83,8 +83,11 @@ const getBookies = (req, res) => {
 const getBookie = (req, res) => {
     const { id } = req.params
     if (ObjectId.isValid(id)) {
-        BookieModel.findOne({ _id: id })
-            .populate('followers follow', { password: 0 })
+        BookieModel.findOne(
+            { _id: id },
+            { password: 0, __v: 0, email: 0, fullName: 0 }
+        )
+            .populate('followers follow')
             .then((data) => res.status(200).json(data))
             .catch((error) =>
                 res.status(500).json({
@@ -102,7 +105,7 @@ const getBookie = (req, res) => {
 const updateBookie = async (req, res) => {
     const { id } = req.params
     const { fullName, username, email, password } = req.body
-    console.log(req.body)
+
     if (ObjectId.isValid(id)) {
         const passwordHash = await bcrypt.hash(password, 10)
         BookieModel.findOneAndUpdate(
@@ -233,6 +236,20 @@ const addAvatar = (req, res) => {
         )
 }
 
+const getBookieTop = (req, res) => {
+    BookieModel.find({}, { password: 0, __v: 0, email: 0, fullName: 0 })
+        .sort({ total: 'desc' })
+        .limit('10')
+        .populate('followers follow')
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(500).json({
+                message: 'Ha ocurrido un error al mostar los bookies',
+                error,
+            })
+        )
+}
+
 module.exports = {
     loginBookie,
     register,
@@ -244,4 +261,5 @@ module.exports = {
     addFollower,
     removeFollower,
     addAvatar,
+    getBookieTop,
 }
