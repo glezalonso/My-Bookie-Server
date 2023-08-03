@@ -143,6 +143,9 @@ const closeMatch = async (req, res) => {
         const votesLocal = userVotes.votes.filter(
             (data) => data.option === 'local'
         )
+        const votesDraw = userVotes.votes.filter(
+            (data) => data.option === 'draw'
+        )
 
         if (local > away) {
             votesLocal.forEach(async (element) => {
@@ -153,6 +156,13 @@ const closeMatch = async (req, res) => {
             })
 
             votesAway.forEach(async (element) => {
+                await BookiesModel.findOneAndUpdate(
+                    { _id: element.username },
+                    { $inc: { failures: 1, total: 1 } }
+                )
+            })
+
+            votesDraw.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
                     { $inc: { failures: 1, total: 1 } }
@@ -177,14 +187,20 @@ const closeMatch = async (req, res) => {
             votesAway.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { success: 1 } }
+                    { $inc: { success: 1, total: 1 } }
                 )
             })
 
             votesLocal.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { failures: 1 } }
+                    { $inc: { failures: 1, total: 1 } }
+                )
+            })
+            votesDraw.forEach(async (element) => {
+                await BookiesModel.findOneAndUpdate(
+                    { _id: element.username },
+                    { $inc: { failures: 1, total: 1 } }
                 )
             })
             await SeasonModel.updateOne(
@@ -202,6 +218,25 @@ const closeMatch = async (req, res) => {
                 { $inc: { 'standings.$.wins': 1 } }
             )
         } else {
+            votesAway.forEach(async (element) => {
+                await BookiesModel.findOneAndUpdate(
+                    { _id: element.username },
+                    { $inc: { failures: 1, total: 1 } }
+                )
+            })
+
+            votesLocal.forEach(async (element) => {
+                await BookiesModel.findOneAndUpdate(
+                    { _id: element.username },
+                    { $inc: { failures: 1, total: 1 } }
+                )
+            })
+            votesDraw.forEach(async (element) => {
+                await BookiesModel.findOneAndUpdate(
+                    { _id: element.username },
+                    { $inc: { success: 1, total: 1 } }
+                )
+            })
             await SeasonModel.updateOne(
                 {
                     _id: seasonId,
