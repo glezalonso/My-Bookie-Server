@@ -187,20 +187,20 @@ const closeMatch = async (req, res) => {
             votesAway.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { success: 1 } }
+                    { $inc: { success: 1, total: 1 } }
                 )
             })
 
             votesLocal.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { failures: 1 } }
+                    { $inc: { failures: 1, total: 1 } }
                 )
             })
             votesDraw.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { failures: 1 } }
+                    { $inc: { failures: 1, total: 1 } }
                 )
             })
             await SeasonModel.updateOne(
