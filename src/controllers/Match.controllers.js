@@ -134,7 +134,31 @@ const closeMatch = async (req, res) => {
             { new: true }
         )
         const { local: localId, away: awayId, season: seasonId } = placeScore
+
+        const userVotes = await MatchModel.findOne({ _id: id })
+
+        const votesAway = userVotes.votes.filter(
+            (data) => data.option === 'away'
+        )
+        const votesLocal = userVotes.votes.filter(
+            (data) => data.option === 'local'
+        )
+
         if (local > away) {
+            votesLocal.forEach(async (element) => {
+                await BookiesModel.findOneAndUpdate(
+                    { _id: element.username },
+                    { $inc: { success: 1, total: 1 } }
+                )
+            })
+
+            votesAway.forEach(async (element) => {
+                await BookiesModel.findOneAndUpdate(
+                    { _id: element.username },
+                    { $inc: { failures: 1, total: 1 } }
+                )
+            })
+
             await SeasonModel.updateOne(
                 {
                     _id: seasonId,
@@ -150,6 +174,19 @@ const closeMatch = async (req, res) => {
                 { $inc: { 'standings.$.wins': 1 } }
             )
         } else if (away > local) {
+            votesAway.forEach(async (element) => {
+                await BookiesModel.findOneAndUpdate(
+                    { _id: element.username },
+                    { $inc: { success: 1 } }
+                )
+            })
+
+            votesLocal.forEach(async (element) => {
+                await BookiesModel.findOneAndUpdate(
+                    { _id: element.username },
+                    { $inc: { failures: 1 } }
+                )
+            })
             await SeasonModel.updateOne(
                 {
                     _id: seasonId,

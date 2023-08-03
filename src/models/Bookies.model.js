@@ -43,6 +43,15 @@ const bookieSchema = new Schema({
             ref: 'Bookie',
         },
     ],
+    total: {
+        type: Number,
+    },
+    success: {
+        type: Number,
+    },
+    failures: {
+        type: Number,
+    },
 })
 
 module.exports = mongoose.model('Bookie', bookieSchema)
