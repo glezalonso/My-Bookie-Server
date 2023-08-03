@@ -69,7 +69,7 @@ const loginBookie = async (req, res) => {
 }
 
 const getBookies = (req, res) => {
-    BookieModel.find({}, { password: 0, __v: 0, email: 0, fullName: 0 })
+    BookieModel.find({})
         .populate('followers follow')
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -83,10 +83,7 @@ const getBookies = (req, res) => {
 const getBookie = (req, res) => {
     const { id } = req.params
     if (ObjectId.isValid(id)) {
-        BookieModel.findOne(
-            { _id: id },
-            { password: 0, __v: 0, email: 0, fullName: 0 }
-        )
+        BookieModel.findOne({ _id: id })
             .populate('followers follow')
             .then((data) => res.status(200).json(data))
             .catch((error) =>
