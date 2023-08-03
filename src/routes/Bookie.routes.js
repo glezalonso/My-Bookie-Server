@@ -15,12 +15,12 @@ const router = express.Router()
 
 router.get('/', verifyToken, getBookies)
 router.get('/:id', verifyToken, getBookie)
+router.put('/top', verifyToken, getBookieTop)
 router.get('/picks/:id', verifyToken, getBookiePicks)
 router.put('/:id', verifyToken, updateBookie)
 router.delete('/:id', verifyToken, deleteBookie)
 router.post('/follow/:id', verifyToken, addFollower)
 router.put('/follow/:id', verifyToken, removeFollower)
 router.put('/avatar/:id', verifyToken, addAvatar)
-router.put('/top', verifyToken, getBookieTop)
 
 module.exports = router
