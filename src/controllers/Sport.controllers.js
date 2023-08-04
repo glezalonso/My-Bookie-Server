@@ -14,24 +14,21 @@ const getSports = (req, res) => {
 
 const getSport = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        SportModel.findOne({ _id: id })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res
-                    .status(501)
-                    .json({ message: 'No hay deportes que mostar ', error })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    SportModel.findOne({ _id: id })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res
+                .status(501)
+                .json({ message: 'No hay deportes que mostar ', error })
+        )
 }
 
 const createSport = async (req, res) => {
     const { sport, description } = req.body
-
     if (req.files) {
         const { poster } = req.files
         try {
@@ -76,6 +73,10 @@ const createSport = async (req, res) => {
 const updateSport = async (req, res) => {
     const { id } = req.params
     const { sport, description } = req.body
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
+            messsage: 'Ha ocurrido un error en la peticion',
+        })
     if (req.files) {
         const { poster } = req.files
         try {
@@ -116,20 +117,18 @@ const updateSport = async (req, res) => {
 
 const deleteSport = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        SportModel.deleteOne({ _id: id })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'No se ha podido borrar el deporte',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    SportModel.deleteOne({ _id: id })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'No se ha podido borrar el deporte',
+                error,
+            })
+        )
 }
 
 module.exports = {

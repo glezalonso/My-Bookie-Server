@@ -16,18 +16,16 @@ const getUsers = (req, res) => {
 
 const getUser = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        UserModel.findById(id)
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Hubo un error al cargar los usuarios!',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({ message: 'Hubo un error en la petición' })
-    }
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({ message: 'Hubo un error en la petición' })
+    UserModel.findById(id)
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Hubo un error al cargar los usuarios!',
+                error,
+            })
+        )
 }
 
 const loginUser = async (req, res) => {
@@ -104,57 +102,54 @@ const registerUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        const { username, password, email, fullName, isAdmin } = req.body
-        try {
-            const passCrypt = await bcrypt.hash(password, 10)
-            await UserModel.findOneAndUpdate(
-                { _id: id },
-                {
-                    username,
-                    password: passCrypt,
-                    email,
-                    fullName,
-                    isAdmin,
-                },
-                { new: true }
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({ message: 'Hubo un error en la petición' })
+    const { username, password, email, fullName, isAdmin } = req.body
+    try {
+        const passCrypt = await bcrypt.hash(password, 10)
+        await UserModel.findOneAndUpdate(
+            { _id: id },
+            {
+                username,
+                password: passCrypt,
+                email,
+                fullName,
+                isAdmin,
+            },
+            { new: true }
+        )
+            .then((data) => res.status(201).json(data))
+            .catch((error) =>
+                res.status(501).json({
+                    message: 'No se ha podido actualizar el usuario',
+                    error,
+                })
             )
-                .then((data) => res.status(201).json(data))
-                .catch((error) =>
-                    res.status(501).json({
-                        message: 'No se ha podido actualizar el usuario',
-                        error,
-                    })
-                )
-        } catch (error) {
-            return res.status(501).json({
-                message: 'No se ha podido actualizar el usuario ',
-                error,
-            })
-        }
-    } else {
-        res.status(501).json({ message: 'Hubo un error en la petición' })
+    } catch (error) {
+        return res.status(501).json({
+            message: 'No se ha podido actualizar el usuario ',
+            error,
+        })
     }
 }
 
 const deleteUser = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        UserModel.deleteOne({ _id: id })
-            .then(() =>
-                res
-                    .status(201)
-                    .json({ message: 'El usuario se ha borrado exitosamente!' })
-            )
-            .catch((error) =>
-                res.status(505).json({
-                    message: 'Hubo un error al intentar borrar el usuario ',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({ message: 'Hubo un error en la petición' })
-    }
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({ message: 'Hubo un error en la petición' })
+
+    UserModel.deleteOne({ _id: id })
+        .then(() =>
+            res
+                .status(201)
+                .json({ message: 'El usuario se ha borrado exitosamente!' })
+        )
+        .catch((error) =>
+            res.status(505).json({
+                message: 'Hubo un error al intentar borrar el usuario ',
+                error,
+            })
+        )
 }
 
 module.exports = {

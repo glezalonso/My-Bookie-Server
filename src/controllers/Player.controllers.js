@@ -15,28 +15,25 @@ const getPlayers = (req, res) => {
 
 const getPlayer = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        PlayerModel.findOne({ _id: id })
-            .populate('sport team', { __v: 0, description: 0 })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al cargar jugadores  ',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    PlayerModel.findOne({ _id: id })
+        .populate('sport team', { __v: 0, description: 0 })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al cargar jugadores  ',
+                error,
+            })
+        )
 }
 
 const createPlayer = (req, res) => {
-    const { fullName, photo, position, status, sport } = req.body
+    const { fullName, position, status, sport } = req.body
     const newPlayer = new PlayerModel({
         fullName,
-        photo,
         position,
         status,
         sport,
@@ -54,86 +51,76 @@ const createPlayer = (req, res) => {
 
 const updatePlayer = (req, res) => {
     const { id } = req.params
-    const { fullName, photo, position, status, sport } = req.body
-    if (ObjectId.isValid(id)) {
-        PlayerModel.findOneAndUpdate(
-            { _id: id },
-            {
-                fullName,
-                photo,
-                position,
-                status,
-                sport,
-            },
-            { new: true }
-        )
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al actualizar el jugador',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    const { fullName, position, status, sport } = req.body
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    PlayerModel.findOneAndUpdate(
+        { _id: id },
+        {
+            fullName,
+            position,
+            status,
+            sport,
+        },
+        { new: true }
+    )
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al actualizar el jugador',
+                error,
+            })
+        )
 }
 
 const deletePlayer = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        PlayerModel.findOneAndDelete({ _id: id })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.staus(501).json({
-                    message:
-                        'Ha ocurrido un error al intentar borrar el usuario',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    PlayerModel.findOneAndDelete({ _id: id })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.staus(501).json({
+                message: 'Ha ocurrido un error al intentar borrar el usuario',
+                error,
+            })
+        )
 }
 const getPlayerBySport = (req, res) => {
     const { sport } = req.body
-    if (ObjectId.isValid(sport)) {
-        PlayerModel.find({ sport })
-            .populate('sport team', { __v: 0, poster: 0, description: 0 })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al cargar jugadores  ',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(sport))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    PlayerModel.find({ sport })
+        .populate('sport team', { __v: 0, poster: 0, description: 0 })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al cargar jugadores  ',
+                error,
+            })
+        )
 }
 const getPlayersTeamless = (req, res) => {
     const { sport } = req.body
-    if (ObjectId.isValid(sport)) {
-        PlayerModel.find({ sport, team: null })
-            .populate('sport team', { __v: 0, poster: 0, description: 0 })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al cargar jugadores  ',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(sport))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    PlayerModel.find({ sport, team: null })
+        .populate('sport team', { __v: 0, poster: 0, description: 0 })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al cargar jugadores  ',
+                error,
+            })
+        )
 }
 
 module.exports = {

@@ -14,20 +14,18 @@ const getRounds = (req, res) => {
 
 const getRound = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        RoundModel.findOne({ _id: id })
-            .populate('season league sport')
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res
-                    .status(501)
-                    .json({ message: 'No hay jornadas que mostar ', error })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    RoundModel.findOne({ _id: id })
+        .populate('season league sport')
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res
+                .status(501)
+                .json({ message: 'No hay jornadas que mostar ', error })
+        )
 }
 
 const createRound = (req, res) => {
@@ -53,49 +51,45 @@ const createRound = (req, res) => {
 const updateRound = (req, res) => {
     const { id } = req.params
     const { round, roundNumber, season, status, league, sport } = req.body
-    if (ObjectId.isValid(id)) {
-        RoundModel.findOneAndUpdate(
-            { _id: id },
-            {
-                round,
-                roundNumber,
-                season,
-                status,
-                league,
-                sport,
-            },
-            { new: true }
-        )
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'No se ha podido actualizarla jornada ',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    RoundModel.findOneAndUpdate(
+        { _id: id },
+        {
+            round,
+            roundNumber,
+            season,
+            status,
+            league,
+            sport,
+        },
+        { new: true }
+    )
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'No se ha podido actualizarla jornada ',
+                error,
+            })
+        )
 }
 
 const deleteRound = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        RoundModel.deleteOne({ _id: id })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'No se ha podido borrar la jornada',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    RoundModel.deleteOne({ _id: id })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'No se ha podido borrar la jornada',
+                error,
+            })
+        )
 }
 
 const getRoundsBySeason = (req, res) => {

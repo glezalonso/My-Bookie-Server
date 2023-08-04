@@ -23,25 +23,23 @@ const getMatches = (req, res) => {
 
 const getMatch = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        MatchModel.findOne({ _id: id })
-            .populate(
-                'round season league local away sport lineup.local.playerId lineup.away.playerId votes.username comments.username',
-                { __v: 0 }
-            )
-            .sort({ date: 'asc' })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al mostar los juegos',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    MatchModel.findOne({ _id: id })
+        .populate(
+            'round season league local away sport lineup.local.playerId lineup.away.playerId votes.username comments.username',
+            { __v: 0 }
+        )
+        .sort({ date: 'asc' })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostar los juegos',
+                error,
+            })
+        )
 }
 
 const createMatch = (req, res) => {
@@ -72,51 +70,47 @@ const updateMatch = (req, res) => {
     const { id } = req.params
     const { date, teamHome, teamAway, round, season, league, status, sport } =
         req.body
-    if (ObjectId.isValid(id)) {
-        MatchModel.findOneAndUpdate(
-            { _id: id },
-            {
-                date,
-                local: teamHome,
-                away: teamAway,
-                round,
-                season,
-                league,
-                sport,
-                status,
-            },
-            { new: true }
-        )
-            .then((data) => res.status(201).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al actualizar el juego',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    MatchModel.findOneAndUpdate(
+        { _id: id },
+        {
+            date,
+            local: teamHome,
+            away: teamAway,
+            round,
+            season,
+            league,
+            sport,
+            status,
+        },
+        { new: true }
+    )
+        .then((data) => res.status(201).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al actualizar el juego',
+                error,
+            })
+        )
 }
 
 const deleteMatch = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        MatchModel.findOneAndDelete({ _id: id })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al intentar borrar el juego',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    MatchModel.findOneAndDelete({ _id: id })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al intentar borrar el juego',
+                error,
+            })
+        )
 }
 
 const closeMatch = async (req, res) => {
@@ -264,80 +258,76 @@ const closeMatch = async (req, res) => {
 const addLineUp = (req, res) => {
     const { id } = req.params
     const { playerId, type } = req.body
-    if (ObjectId.isValid(id)) {
-        if (type === 'local') {
-            MatchModel.findOneAndUpdate(
-                { _id: id },
-                { $push: { lineup: { local: { playerId } } } },
-                { new: true }
-            )
-                .then((data) => res.status(201).json(data))
-                .catch((error) =>
-                    res.status(501).json({
-                        message:
-                            'Ha ocurrido un error al agregar el jugador a la alineación local',
-                        error,
-                    })
-                )
-        } else {
-            MatchModel.findOneAndUpdate(
-                { _id: id },
-                { $push: { lineup: { away: { playerId } } } },
-                { new: true }
-            )
-                .then((data) => res.status(201).json(data))
-                .catch((error) =>
-                    res.status(501).json({
-                        message:
-                            'Ha ocurrido un error al agregar el jugador a la alineación visitante',
-                        error,
-                    })
-                )
-        }
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
+    if (type === 'local') {
+        MatchModel.findOneAndUpdate(
+            { _id: id },
+            { $push: { lineup: { local: { playerId } } } },
+            { new: true }
+        )
+            .then((data) => res.status(201).json(data))
+            .catch((error) =>
+                res.status(501).json({
+                    message:
+                        'Ha ocurrido un error al agregar el jugador a la alineación local',
+                    error,
+                })
+            )
+    } else {
+        MatchModel.findOneAndUpdate(
+            { _id: id },
+            { $push: { lineup: { away: { playerId } } } },
+            { new: true }
+        )
+            .then((data) => res.status(201).json(data))
+            .catch((error) =>
+                res.status(501).json({
+                    message:
+                        'Ha ocurrido un error al agregar el jugador a la alineación visitante',
+                    error,
+                })
+            )
     }
 }
 
 const removeLineUp = (req, res) => {
     const { id } = req.params
     const { playerId, lineId, type } = req.body
-    if (ObjectId.isValid(id)) {
-        if (type === 'local') {
-            MatchModel.findOneAndUpdate(
-                { _id: id },
-                { $pull: { lineup: { local: { playerId, _id: lineId } } } },
-                { new: true }
-            )
-                .then((data) => res.status(201).json(data))
-                .catch((error) =>
-                    res.status(501).json({
-                        message:
-                            'Ha ocurrido un error al remover el jugador a la alineación visitante',
-                        error,
-                    })
-                )
-        } else {
-            MatchModel.findOneAndUpdate(
-                { _id: id },
-                { $pull: { lineup: { away: { playerId, _id: lineId } } } },
-                { new: true }
-            )
-                .then((data) => res.status(201).json(data))
-                .catch((error) =>
-                    res.status(501).json({
-                        message:
-                            'Ha ocurrido un error al remover el jugador a la alineación visitante',
-                        error,
-                    })
-                )
-        }
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
+    if (type === 'local') {
+        MatchModel.findOneAndUpdate(
+            { _id: id },
+            { $pull: { lineup: { local: { playerId, _id: lineId } } } },
+            { new: true }
+        )
+            .then((data) => res.status(201).json(data))
+            .catch((error) =>
+                res.status(501).json({
+                    message:
+                        'Ha ocurrido un error al remover el jugador a la alineación visitante',
+                    error,
+                })
+            )
+    } else {
+        MatchModel.findOneAndUpdate(
+            { _id: id },
+            { $pull: { lineup: { away: { playerId, _id: lineId } } } },
+            { new: true }
+        )
+            .then((data) => res.status(201).json(data))
+            .catch((error) =>
+                res.status(501).json({
+                    message:
+                        'Ha ocurrido un error al remover el jugador a la alineación visitante',
+                    error,
+                })
+            )
     }
 }
 
@@ -345,60 +335,56 @@ const addComment = (req, res) => {
     const { id } = req.params
     const { userId, comment } = req.body
 
-    if (ObjectId.isValid(id)) {
-        MatchModel.findOneAndUpdate(
-            { _id: id },
-            { $push: { comments: { username: userId, comment } } },
-            { new: true }
-        )
-            .then(() =>
-                res
-                    .status(202)
-                    .json({ message: 'Se ha agregado comentario exitosamente' })
-            )
-            .catch((error) =>
-                res.status(500).json({
-                    message: 'Ha ocurrido un error al agregar el post',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    MatchModel.findOneAndUpdate(
+        { _id: id },
+        { $push: { comments: { username: userId, comment } } },
+        { new: true }
+    )
+        .then(() =>
+            res
+                .status(202)
+                .json({ message: 'Se ha agregado comentario exitosamente' })
+        )
+        .catch((error) =>
+            res.status(500).json({
+                message: 'Ha ocurrido un error al agregar el post',
+                error,
+            })
+        )
 }
 
 const removeComment = (req, res) => {
     const { id } = req.params
     const { userId, comment, commentId } = req.body
 
-    if (ObjectId.isValid(id)) {
-        MatchModel.findOneAndUpdate(
-            { _id: id },
-            {
-                $pull: {
-                    comments: { username: userId, comment, _id: commentId },
-                },
-            },
-            { new: true }
-        )
-            .then(() =>
-                res
-                    .status(202)
-                    .json({ message: 'Se ha borrado comentario exitosamente' })
-            )
-            .catch((error) =>
-                res.status(500).json({
-                    message: 'Ha ocurrido un error al borrar el post',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    MatchModel.findOneAndUpdate(
+        { _id: id },
+        {
+            $pull: {
+                comments: { username: userId, comment, _id: commentId },
+            },
+        },
+        { new: true }
+    )
+        .then(() =>
+            res
+                .status(202)
+                .json({ message: 'Se ha borrado comentario exitosamente' })
+        )
+        .catch((error) =>
+            res.status(500).json({
+                message: 'Ha ocurrido un error al borrar el post',
+                error,
+            })
+        )
 }
 
 const getMatchesToday = (req, res) => {
@@ -420,115 +406,105 @@ const getMatchesToday = (req, res) => {
 
 const getMatchesOpenByLeague = (req, res) => {
     const { league } = req.body
-    if (ObjectId.isValid(league)) {
-        MatchModel.find({ league, status: true })
-            .populate('round season league local away sport votes.username', {
-                __v: 0,
-            })
-            .limit('100')
-            .sort({ date: 'asc' })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al mostrarlos juegos',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(league))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    MatchModel.find({ league, status: true })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
+        .limit('100')
+        .sort({ date: 'asc' })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
 }
 
 const getMatchesClosedByLeague = (req, res) => {
     const { league } = req.body
-    if (ObjectId.isValid(league)) {
-        MatchModel.find({ league, status: false })
-            .populate('round season league local away sport votes.username', {
-                __v: 0,
-                password: 0,
-            })
-            .limit('100')
-            .sort({ date: 'asc' })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al mostrarlos juegos',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(league))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    MatchModel.find({ league, status: false })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+            password: 0,
+        })
+        .limit('100')
+        .sort({ date: 'asc' })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
 }
 
 const getMatchesByRound = (req, res) => {
     const { round } = req.body
-    if (ObjectId.isValid(round)) {
-        MatchModel.find({ round })
-            .populate('round season league local away sport votes.username', {
-                __v: 0,
-            })
-            .sort({ date: 'asc' })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al mostrarlos juegos',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(round))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    MatchModel.find({ round })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
+        .sort({ date: 'asc' })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
 }
 
 const getMatchesBySeason = (req, res) => {
     const { season } = req.body
-    if (ObjectId.isValid(season)) {
-        MatchModel.find({ season })
-            .populate('round season league local away sport votes.username', {
-                __v: 0,
-            })
-            .sort({ date: 'asc' })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al mostrarlos juegos',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(season))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    MatchModel.find({ season })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
+        .sort({ date: 'asc' })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
 }
 
 const getMatchesByTeam = (req, res) => {
     const { team } = req.body
-    if (ObjectId.isValid(team)) {
-        MatchModel.find({ $or: [{ away: team }, { local: team }] })
-            .populate('round season league local away sport votes.username', {
-                __v: 0,
-            })
-            .sort({ date: 'asc' })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al mostrarlos juegos',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(team))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    MatchModel.find({ $or: [{ away: team }, { local: team }] })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
+        .sort({ date: 'asc' })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
 }
 
 const getMatchesOpen = (req, res) => {
@@ -582,43 +558,39 @@ const getNextMatchesBySport = (req, res) => {
 const pickem = async (req, res) => {
     const { option, userId, match } = req.body
 
-    if (ObjectId.isValid(match)) {
-        const existVote = await MatchModel.findOne({
-            _id: match,
-            votes: { $elemMatch: { username: userId } },
-        })
-        if (existVote)
-            return res
-                .status(500)
-                .json({ message: 'Ya se ha colocado su voto' })
-
-        MatchModel.findOneAndUpdate(
-            { _id: match },
-            { $push: { votes: { username: userId, option } } }
-        )
-            .then(async () => {
-                await BookiesModel.findOneAndUpdate(
-                    { _id: userId },
-                    { $push: { votes: { match, option } } },
-                    { new: true }
-                )
-            })
-            .then(() =>
-                res.status(202).json({
-                    message: 'Se ha agregado el voto exitosamente',
-                })
-            )
-            .catch((error) =>
-                res.status(500).json({
-                    message: 'Ha ocurrido un error al agregar el voto',
-                    error,
-                })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(match))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    const existVote = await MatchModel.findOne({
+        _id: match,
+        votes: { $elemMatch: { username: userId } },
+    })
+    if (existVote)
+        return res.status(500).json({ message: 'Ya se ha colocado su voto' })
+
+    MatchModel.findOneAndUpdate(
+        { _id: match },
+        { $push: { votes: { username: userId, option } } }
+    )
+        .then(async () => {
+            await BookiesModel.findOneAndUpdate(
+                { _id: userId },
+                { $push: { votes: { match, option } } },
+                { new: true }
+            )
+        })
+        .then(() =>
+            res.status(202).json({
+                message: 'Se ha agregado el voto exitosamente',
+            })
+        )
+        .catch((error) =>
+            res.status(500).json({
+                message: 'Ha ocurrido un error al agregar el voto',
+                error,
+            })
+        )
 }
 
 const getMatchBookieClosed = (req, res) => {

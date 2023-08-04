@@ -15,20 +15,18 @@ const getLeagues = (req, res) => {
 
 const getLeague = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        LeagueModel.findOne({ _id: id })
-            .populate('sport', { __v: 0, status: 0 })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res
-                    .status(501)
-                    .json({ message: 'No hay ligas para mostrar', error })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    LeagueModel.findOne({ _id: id })
+        .populate('sport', { __v: 0, status: 0 })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res
+                .status(501)
+                .json({ message: 'No hay ligas para mostrar', error })
+        )
 }
 
 const createLeague = async (req, res) => {
@@ -128,19 +126,17 @@ const updateLeague = async (req, res) => {
 
 const deleteLeague = (req, res) => {
     const { id } = req.params
-    if (ObjectId.isValid(id)) {
-        LeagueModel.deleteOne({ _id: id })
-            .then((data) => res.status(200).json(data))
-            .catch((error) =>
-                res
-                    .satus(501)
-                    .json({ message: 'No se ha podido borrar la liga ', error })
-            )
-    } else {
-        res.status(501).json({
+    if (!ObjectId.isValid(id))
+        return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    }
+    LeagueModel.deleteOne({ _id: id })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res
+                .satus(501)
+                .json({ message: 'No se ha podido borrar la liga ', error })
+        )
 }
 const getLeaguesBySport = (req, res) => {
     const { sport } = req.body

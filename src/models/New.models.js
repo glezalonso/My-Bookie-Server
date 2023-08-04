@@ -7,6 +7,12 @@ const newSchema = new Schema({
         ref: 'Sport',
         require: [true, 'la noticia debe estar relacionada a un deporte'],
     },
+    league: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'League',
+        require: [true, 'la noticia debe estar relacionada a un Equipo'],
+    },
+
     title: {
         type: String,
         require: [true, 'la noticia debe tener un titulo'],
