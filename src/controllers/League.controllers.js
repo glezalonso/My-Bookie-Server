@@ -33,8 +33,8 @@ const getLeague = (req, res) => {
 
 const createLeague = async (req, res) => {
     const { league, description, sport } = req.body
-    const { poster } = req.files
-    if (poster) {
+    if (req.files) {
+        const { poster } = req.files
         try {
             const { secure_url } = await upload(poster.tempFilePath)
             const newLeague = new LeagueModel({
@@ -78,8 +78,8 @@ const createLeague = async (req, res) => {
 const updateLeague = async (req, res) => {
     const { id } = req.params
     const { league, description, sport } = req.body
-    const { poster } = req.files
-    if (poster) {
+    if (req.files) {
+        const { poster } = req.files
         try {
             const { secure_url } = await upload(poster.tempFilePath)
             await LeagueModel.findOneAndUpdate(

@@ -31,8 +31,9 @@ const getSport = (req, res) => {
 
 const createSport = async (req, res) => {
     const { sport, description } = req.body
-    const { poster } = req.files
-    if (poster) {
+
+    if (req.files) {
+        const { poster } = req.files
         try {
             const { secure_url } = await upload(poster.tempFilePath)
             const newSport = new SportModel({
@@ -75,8 +76,8 @@ const createSport = async (req, res) => {
 const updateSport = async (req, res) => {
     const { id } = req.params
     const { sport, description } = req.body
-    const { poster } = req.files
-    if (poster) {
+    if (req.files) {
+        const { poster } = req.files
         try {
             const { secure_url } = await upload(poster.tempFilePath)
             SportModel.findOneAndUpdate(
