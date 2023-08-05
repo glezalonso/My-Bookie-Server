@@ -37,9 +37,8 @@ const getNew = (req, res) => {
 }
 
 const createNew = (req, res) => {
-    const { sport, league, date, content, author, title } = req.body
+    const { league, date, content, author, title } = req.body
     const newNew = new NewModel({
-        sport,
         league,
         title,
         date,
@@ -58,7 +57,7 @@ const createNew = (req, res) => {
 
 const updateNew = (req, res) => {
     const { id } = req.params
-    const { sport, league, date, content, author, title } = req.body
+    const { league, date, content, author, title } = req.body
     if (!ObjectId.isValid(id))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
@@ -66,7 +65,6 @@ const updateNew = (req, res) => {
     NewModel.findOneAndUpdate(
         { _id: id },
         {
-            sport,
             league,
             title,
             date,
