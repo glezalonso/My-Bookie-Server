@@ -55,7 +55,7 @@ router.get(
     getMatchBookieClosed
 )
 
-router.put(`/matchbookieopen/:id`, verifyToken, getMatchBookieOpen)
+router.put(`/matchbookieopen/:id/:limit`, verifyToken, getMatchBookieOpen)
 
 router.post('/matchestoday', getMatchesToday)
 

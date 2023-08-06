@@ -595,7 +595,7 @@ const pickem = async (req, res) => {
 
 const getMatchBookieClosed = (req, res) => {
     const { id, date, limit } = req.params
-    console.log(limit)
+
     MatchModel.find({
         date: { $regex: date, $options: 'i' },
         votes: { $elemMatch: { username: id } },
@@ -615,7 +615,8 @@ const getMatchBookieClosed = (req, res) => {
         )
 }
 const getMatchBookieOpen = (req, res) => {
-    const { id } = req.params
+    const { id, limit } = req.params
+
     MatchModel.find({
         votes: { $elemMatch: { username: id } },
         status: true,
@@ -624,7 +625,7 @@ const getMatchBookieOpen = (req, res) => {
             __v: 0,
         })
         .sort({ date: 'asc' })
-        .limit('15')
+        .limit(limit)
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(501).json({
