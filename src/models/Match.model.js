@@ -90,6 +90,10 @@ const MatchModel = new Schema({
             },
         },
     ],
+    oddHome: String,
+    oddAway: String,
+    oddDraw: String,
+    oddOverUnder: String,
 })
 
 module.exports = mongoose.model('Match', MatchModel)

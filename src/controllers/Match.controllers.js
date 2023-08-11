@@ -43,8 +43,20 @@ const getMatch = (req, res) => {
 }
 
 const createMatch = (req, res) => {
-    const { date, teamHome, teamAway, round, season, league, sport, status } =
-        req.body
+    const {
+        date,
+        teamHome,
+        teamAway,
+        oddHome,
+        oddAway,
+        oddOverUnder,
+        oddDraw,
+        round,
+        season,
+        league,
+        sport,
+        status,
+    } = req.body
     const newMatch = new MatchModel({
         date,
         local: teamHome,
@@ -54,6 +66,10 @@ const createMatch = (req, res) => {
         league,
         sport,
         status,
+        oddHome,
+        oddAway,
+        oddOverUnder,
+        oddDraw,
     })
     newMatch
         .save()
@@ -68,8 +84,20 @@ const createMatch = (req, res) => {
 
 const updateMatch = (req, res) => {
     const { id } = req.params
-    const { date, teamHome, teamAway, round, season, league, status, sport } =
-        req.body
+    const {
+        date,
+        teamHome,
+        teamAway,
+        oddHome,
+        oddAway,
+        oddOverUnder,
+        oddDraw,
+        round,
+        season,
+        league,
+        status,
+        sport,
+    } = req.body
     if (!ObjectId.isValid(id))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
@@ -85,6 +113,10 @@ const updateMatch = (req, res) => {
             league,
             sport,
             status,
+            oddHome,
+            oddAway,
+            oddOverUnder,
+            oddDraw,
         },
         { new: true }
     )
