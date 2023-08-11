@@ -365,7 +365,7 @@ const removeLineUp = (req, res) => {
 
 const addComment = (req, res) => {
     const { id } = req.params
-    const { userId, comment } = req.body
+    const { userId, hour, comment } = req.body
 
     if (!ObjectId.isValid(id))
         return res.status(501).json({
@@ -373,7 +373,7 @@ const addComment = (req, res) => {
         })
     MatchModel.findOneAndUpdate(
         { _id: id },
-        { $push: { comments: { username: userId, comment } } },
+        { $push: { comments: { username: userId, hour, comment } } },
         { new: true }
     )
         .then(() =>
@@ -391,9 +391,9 @@ const addComment = (req, res) => {
 
 const removeComment = (req, res) => {
     const { id } = req.params
-    const { userId, comment, commentId } = req.body
+    const { userId, comment, hour, commentId } = req.body
 
-    if (ObjectId.isValid(id))
+    if (!ObjectId.isValid(id))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
@@ -401,7 +401,7 @@ const removeComment = (req, res) => {
         { _id: id },
         {
             $pull: {
-                comments: { username: userId, comment, _id: commentId },
+                comments: { username: userId, hour, comment, _id: commentId },
             },
         },
         { new: true }

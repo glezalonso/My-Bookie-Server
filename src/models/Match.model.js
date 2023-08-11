@@ -77,6 +77,9 @@ const MatchModel = new Schema({
             comment: {
                 type: String,
             },
+            hour: {
+                type: String,
+            },
         },
     ],
     votes: [
