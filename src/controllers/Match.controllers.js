@@ -469,7 +469,7 @@ const getMatchesClosedByLeague = (req, res) => {
             password: 0,
         })
         .limit('100')
-        .sort({ date: 'asc' })
+        .sort({ date: 'desc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(501).json({
