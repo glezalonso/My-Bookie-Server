@@ -139,7 +139,7 @@ const deleteLeague = (req, res) => {
         )
 }
 const getLeaguesBySport = (req, res) => {
-    const { sport } = req.body
+    const { sport } = req.params
     LeagueModel.find({ sport })
         .populate('sport', { __v: 0, status: 0 })
         .then((data) => res.status(200).json(data))

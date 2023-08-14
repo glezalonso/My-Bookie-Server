@@ -420,7 +420,7 @@ const removeComment = (req, res) => {
 }
 
 const getMatchesToday = (req, res) => {
-    const { date } = req.body
+    const { date } = req.params
     MatchModel.find({ date: { $regex: date, $options: 'i' } })
         .populate(
             'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username',
@@ -437,7 +437,7 @@ const getMatchesToday = (req, res) => {
 }
 
 const getMatchesOpenByLeague = (req, res) => {
-    const { league } = req.body
+    const { league, limit } = req.params
     if (!ObjectId.isValid(league))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
@@ -446,7 +446,7 @@ const getMatchesOpenByLeague = (req, res) => {
         .populate('round season league local away sport votes.username', {
             __v: 0,
         })
-        .limit('100')
+        .limit(limit)
         .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -458,7 +458,7 @@ const getMatchesOpenByLeague = (req, res) => {
 }
 
 const getMatchesClosedByLeague = (req, res) => {
-    const { league } = req.body
+    const { league, limit } = req.params
     if (!ObjectId.isValid(league))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
@@ -468,7 +468,7 @@ const getMatchesClosedByLeague = (req, res) => {
             __v: 0,
             password: 0,
         })
-        .limit('100')
+        .limit(limit)
         .sort({ date: 'desc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -480,7 +480,7 @@ const getMatchesClosedByLeague = (req, res) => {
 }
 
 const getMatchesByRound = (req, res) => {
-    const { round } = req.body
+    const { round } = req.params
     if (!ObjectId.isValid(round))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
@@ -500,7 +500,7 @@ const getMatchesByRound = (req, res) => {
 }
 
 const getMatchesBySeason = (req, res) => {
-    const { season } = req.body
+    const { season } = req.params
     if (!ObjectId.isValid(season))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
@@ -520,15 +520,22 @@ const getMatchesBySeason = (req, res) => {
 }
 
 const getMatchesByTeam = (req, res) => {
-    const { team } = req.body
+    const { team, limit, status } = req.params
     if (!ObjectId.isValid(team))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    MatchModel.find({ $or: [{ away: team }, { local: team }] })
+
+    MatchModel.find({
+        $or: [
+            { away: team, status },
+            { local: team, status },
+        ],
+    })
         .populate('round season league local away sport votes.username', {
             __v: 0,
         })
+        .limit(limit)
         .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
@@ -571,7 +578,7 @@ const getMatchesClosed = (req, res) => {
         )
 }
 const getNextMatchesBySport = (req, res) => {
-    const { sport } = req.body
+    const { sport } = req.params
     MatchModel.find({ sport, status: true })
         .populate('round season league local away sport votes.username', {
             __v: 0,
@@ -648,7 +655,6 @@ const getMatchBookieClosed = (req, res) => {
 }
 const getMatchBookieOpen = (req, res) => {
     const { id, limit } = req.params
-
     MatchModel.find({
         votes: { $elemMatch: { username: id } },
         status: true,

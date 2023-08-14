@@ -11,11 +11,12 @@ const {
 } = require('../controllers/League.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 
-// create routes for league with method
-
 router.get('/', getLeagues)
 router.get('/:id', getLeague)
-router.post('/leaguesbysport', getLeaguesBySport)
+
+// leagues by sport
+router.get('/sport/:sport', getLeaguesBySport)
+
 router.post('/', verifyToken, createLeague)
 router.put('/:id', verifyToken, updateLeague)
 router.delete('/:id', verifyToken, deleteLeague)

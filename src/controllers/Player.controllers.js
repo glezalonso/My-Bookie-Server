@@ -91,7 +91,7 @@ const deletePlayer = (req, res) => {
         )
 }
 const getPlayerBySport = (req, res) => {
-    const { sport } = req.body
+    const { sport } = req.params
     if (!ObjectId.isValid(sport))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
@@ -107,7 +107,7 @@ const getPlayerBySport = (req, res) => {
         )
 }
 const getPlayersTeamless = (req, res) => {
-    const { sport } = req.body
+    const { sport } = req.params
     if (!ObjectId.isValid(sport))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',

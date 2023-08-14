@@ -160,7 +160,8 @@ const removeTeam = (req, res) => {
         )
 }
 const getSeasonsBySport = (req, res) => {
-    const { sport } = req.body
+    const { sport } = req.params
+
     SeasonModel.find({ sport })
         .populate('league sport standings.team')
         .then((data) => res.status(200).json(data))
@@ -173,7 +174,7 @@ const getSeasonsBySport = (req, res) => {
         )
 }
 const getSeasonsByLeague = (req, res) => {
-    const { league } = req.body
+    const { league } = req.params
     SeasonModel.find({ league })
         .populate('league sport standings.team')
         .then((data) => res.status(200).json(data))

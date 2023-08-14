@@ -19,6 +19,6 @@ router.put('/:id', verifyToken, updateTeam)
 router.delete('/:id', verifyToken, deleteTeam)
 router.post('/addplayer/:id', verifyToken, addPlayer)
 router.delete('/removeplayer/:id', verifyToken, removePlayer)
-router.post('/teamsbysport', getTeamBySport)
+router.get('/sport/:sport', getTeamBySport)
 
 module.exports = router

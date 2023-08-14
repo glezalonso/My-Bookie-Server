@@ -224,7 +224,7 @@ const deleteTeam = (req, res) => {
 }
 
 const getTeamBySport = (req, res) => {
-    const { sport } = req.body
+    const { sport } = req.params
     if (!ObjectId.isValid(sport))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',

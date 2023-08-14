@@ -17,8 +17,8 @@ const { verifyToken } = require('../middlewares/verifyToken')
 router.get('/', getSeasons)
 router.get('/:id', getSeason)
 // Extra endpoints
-router.post('/seasonsbyleague', getSeasonsByLeague)
-router.post('/seasonsbysport', getSeasonsBySport)
+router.get('/league/:league', getSeasonsByLeague)
+router.get('/sport/:sport', getSeasonsBySport)
 router.post('/seasonsopen', getSeasonsOpen)
 
 // Protected routes

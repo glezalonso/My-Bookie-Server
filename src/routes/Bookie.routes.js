@@ -15,7 +15,7 @@ const router = express.Router()
 
 router.get('/', verifyToken, getBookies)
 router.get('/:id', verifyToken, getBookie)
-router.put('/top', verifyToken, getBookieTop)
+router.get('/top/:limit', verifyToken, getBookieTop)
 router.get('/picks/:id', verifyToken, getBookiePicks)
 router.put('/:id', verifyToken, updateBookie)
 router.delete('/:id', verifyToken, deleteBookie)

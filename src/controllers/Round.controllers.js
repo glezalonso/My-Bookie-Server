@@ -93,7 +93,7 @@ const deleteRound = (req, res) => {
 }
 
 const getRoundsBySeason = (req, res) => {
-    const { season } = req.body
+    const { season } = req.params
     RoundModel.find({ season })
         .populate('season league sport')
         .then((data) => res.status(200).json(data))

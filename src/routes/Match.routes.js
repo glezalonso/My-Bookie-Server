@@ -55,24 +55,24 @@ router.get(
     getMatchBookieClosed
 )
 
-router.put(`/matchbookieopen/:id/:limit`, verifyToken, getMatchBookieOpen)
+router.get(`/matchbookieopen/:id/:limit`, verifyToken, getMatchBookieOpen)
 
-router.post('/matchestoday', getMatchesToday)
+router.get('/date/:date', getMatchesToday)
 
-router.post('/matchesopenbyleague', getMatchesOpenByLeague)
+router.get('/openleague/:league/:limit', getMatchesOpenByLeague)
 
-router.post('/matchesclosedbyleague', getMatchesClosedByLeague)
+router.get('/closedleague/:league/:limit', getMatchesClosedByLeague)
 
-router.post('/matchesbyround', getMatchesByRound)
+router.get('/round/:round', getMatchesByRound)
 
-router.post('/matchesbyseason', getMatchesBySeason)
+router.get('/season/:season', getMatchesBySeason)
 
-router.post('/matchesteams', getMatchesByTeam)
+router.get('/team/:team/:limit/:status', getMatchesByTeam)
 
-router.post('/matchesopen', getMatchesOpen)
+router.get('/open', getMatchesOpen)
 
-router.post('/matchesclosed', getMatchesClosed)
+router.get('/closed', getMatchesClosed)
 
-router.post('/nextmatchesbysport', getNextMatchesBySport)
+router.get('/nextmatches/sport/:sport', getNextMatchesBySport)
 
 module.exports = router

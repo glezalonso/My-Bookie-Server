@@ -12,7 +12,9 @@ const { verifyToken } = require('../middlewares/verifyToken')
 
 router.get('/', getRounds)
 router.get('/:id', getRound)
-router.post('/roundsbyseason', getRoundsBySeason)
+
+// Round by season
+router.get('/season/:season', getRoundsBySeason)
 router.post('/', verifyToken, createRound)
 router.put('/:id', verifyToken, updateRound)
 router.delete('/:id', verifyToken, deleteRound)

@@ -13,7 +13,7 @@ const {
 
 router.get('/', getNews)
 router.get('/:id', getNew)
-router.post('/newsbysport', getNewsBySport)
+router.post('/sport/:sport', getNewsBySport)
 router.post('/', verifyToken, createNew)
 router.put('/:id', verifyToken, updateNew)
 router.delete('/:id', verifyToken, deleteNew)
