@@ -633,10 +633,9 @@ const pickem = async (req, res) => {
 }
 
 const getMatchBookieClosed = (req, res) => {
-    const { id, date, limit } = req.params
+    const { id, limit } = req.params
 
     MatchModel.find({
-        date: { $regex: date, $options: 'i' },
         votes: { $elemMatch: { username: id } },
         status: false,
     })

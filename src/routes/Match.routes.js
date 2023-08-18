@@ -49,11 +49,7 @@ router.put('/removeComment/:id', verifyToken, removeComment)
 router.post('/pickem', verifyToken, pickem)
 
 // Extra endpoints
-router.get(
-    `/matchbookieclosed/:id/:date/:limit`,
-    verifyToken,
-    getMatchBookieClosed
-)
+router.get(`/matchbookieclosed/:id/:limit`, verifyToken, getMatchBookieClosed)
 
 router.get(`/matchbookieopen/:id/:limit`, verifyToken, getMatchBookieOpen)
 
