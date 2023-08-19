@@ -420,7 +420,7 @@ const removeComment = (req, res) => {
 }
 
 const getMatchesToday = async (req, res) => {
-    const perPage = 5
+    const perPage = 15
     const { date } = req.params
     const page = parseInt(req.params.page)
     const total = await MatchModel.count({
