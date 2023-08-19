@@ -229,7 +229,7 @@ const addAvatar = (req, res) => {
 const getBookieTop = (req, res) => {
     const { limit } = req.params
     BookieModel.find({}, { password: 0, __v: 0, email: 0, fullName: 0 })
-        .sort({ total: 'desc' })
+        .sort({ success: 'desc' })
         .limit(limit)
         .populate('followers follow')
         .then((data) => res.status(200).json(data))

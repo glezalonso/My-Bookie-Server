@@ -419,7 +419,49 @@ const removeComment = (req, res) => {
         )
 }
 
-const getMatchesToday = (req, res) => {
+const getMatchesToday = async (req, res) => {
+    const perPage = 10
+    const { date } = req.params
+    const page = parseInt(req.params.page)
+    const total = await MatchModel.count({
+        date: { $regex: date, $options: 'i' },
+    })
+
+    const totalPages = Math.ceil(total / perPage)
+    MatchModel.find({ date: { $regex: date, $options: 'i' } })
+        .skip(perPage * page - perPage)
+        .limit(perPage)
+        .populate(
+            'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username',
+            { __v: 0 }
+        )
+        .sort({ date: 'asc' })
+        .then((data) => res.status(200).json({ data, total, page, totalPages }))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
+}
+
+const getMatchesTodaySport = async (req, res) => {
+    const { date, sport } = req.params
+    MatchModel.find({ sport, date: { $regex: date, $options: 'i' } })
+        .populate(
+            'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username',
+            { __v: 0 }
+        )
+        .sort({ date: 'asc' })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
+}
+const getMatchesPanel = async (req, res) => {
     const { date } = req.params
     MatchModel.find({ date: { $regex: date, $options: 'i' } })
         .populate(
@@ -695,4 +737,6 @@ module.exports = {
     pickem,
     getMatchBookieClosed,
     getMatchBookieOpen,
+    getMatchesTodaySport,
+    getMatchesPanel,
 }
