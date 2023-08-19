@@ -421,7 +421,8 @@ const removeComment = (req, res) => {
 
 const getMatchesToday = async (req, res) => {
     const perPage = 15
-    const { date } = req.params
+    const { date, sport } = req.params
+    console.log(sport)
     const page = parseInt(req.params.page)
     const total = await MatchModel.count({
         date: { $regex: date, $options: 'i' },
@@ -429,23 +430,45 @@ const getMatchesToday = async (req, res) => {
 
     const totalPages = Math.ceil(total / perPage)
 
-    console.log(perPage * page - perPage)
-    MatchModel.find({ date: { $regex: date, $options: 'i' } })
-        .sort({ status: 'desc', date: 'asc' })
-        .skip(page * perPage - perPage)
-        .limit(perPage)
-        .populate(
-            'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username',
-            { __v: 0 }
-        )
+    if (sport === 'all') {
+        MatchModel.find({ date: { $regex: date, $options: 'i' } })
+            .sort({ status: 'desc', date: 'asc' })
+            .skip(page * perPage - perPage)
+            .limit(perPage)
+            .populate(
+                'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username',
+                { __v: 0 }
+            )
 
-        .then((data) => res.status(200).json({ data, total, page, totalPages }))
-        .catch((error) =>
-            res.status(501).json({
-                message: 'Ha ocurrido un error al mostrarlos juegos',
-                error,
-            })
-        )
+            .then((data) =>
+                res.status(200).json({ data, total, page, totalPages })
+            )
+            .catch((error) =>
+                res.status(501).json({
+                    message: 'Ha ocurrido un error al mostrarlos juegos',
+                    error,
+                })
+            )
+    } else {
+        MatchModel.find({ sport, date: { $regex: date, $options: 'i' } })
+            .sort({ status: 'desc', date: 'asc' })
+            .skip(page * perPage - perPage)
+            .limit(perPage)
+            .populate(
+                'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username',
+                { __v: 0 }
+            )
+
+            .then((data) =>
+                res.status(200).json({ data, total, page, totalPages })
+            )
+            .catch((error) =>
+                res.status(501).json({
+                    message: 'Ha ocurrido un error al mostrarlos juegos',
+                    error,
+                })
+            )
+    }
 }
 
 const getMatchesTodaySport = async (req, res) => {

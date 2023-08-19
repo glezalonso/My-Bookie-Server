@@ -55,7 +55,7 @@ router.get(`/matchbookieclosed/:id/:limit`, verifyToken, getMatchBookieClosed)
 
 router.get(`/matchbookieopen/:id/:limit`, verifyToken, getMatchBookieOpen)
 
-router.get('/today/:page/:date', getMatchesToday)
+router.get('/today/:page/:date/:sport', getMatchesToday)
 
 router.get('/matchestoday/:date', getMatchesPanel)
 
