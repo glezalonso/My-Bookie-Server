@@ -420,19 +420,18 @@ const removeComment = (req, res) => {
 }
 
 const getMatchesToday = async (req, res) => {
-    const perPage = 15
     const { date, sport } = req.params
-    console.log(sport)
     const page = parseInt(req.params.page)
     const total = await MatchModel.count({
         date: { $regex: date, $options: 'i' },
     })
+    const perPage = 11
 
-    const totalPages = Math.ceil(total / perPage)
+    const totalPages = Math.round(total / perPage)
 
     if (sport === 'all') {
         MatchModel.find({ date: { $regex: date, $options: 'i' } })
-            .sort({ status: 'desc', date: 'asc' })
+            .sort({ status: 'desc', date: 'asc', _id: 'desc' })
             .skip(page * perPage - perPage)
             .limit(perPage)
             .populate(
@@ -451,7 +450,8 @@ const getMatchesToday = async (req, res) => {
             )
     } else {
         MatchModel.find({ sport, date: { $regex: date, $options: 'i' } })
-            .sort({ status: 'desc', date: 'asc' })
+            .sort({})
+            .sort({ date: 'asc', _id: 'desc', status: 'desc' })
             .skip(page * perPage - perPage)
             .limit(perPage)
             .populate(

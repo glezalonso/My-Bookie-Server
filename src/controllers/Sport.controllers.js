@@ -4,6 +4,7 @@ const { upload } = require('../libs/cloudinary')
 
 const getSports = (req, res) => {
     SportModel.find()
+        .sort({ _id: 'desc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res
