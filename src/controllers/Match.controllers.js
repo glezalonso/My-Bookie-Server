@@ -427,7 +427,7 @@ const getMatchesToday = async (req, res) => {
     })
     const perPage = 11
 
-    const totalPages = Math.round(total / perPage)
+    const totalPages = Math.ceil(total / perPage)
 
     if (sport === 'all') {
         MatchModel.find({ date: { $regex: date, $options: 'i' } })
