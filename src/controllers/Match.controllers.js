@@ -450,8 +450,7 @@ const getMatchesToday = async (req, res) => {
             )
     } else {
         MatchModel.find({ sport, date: { $regex: date, $options: 'i' } })
-            .sort({})
-            .sort({ date: 'asc', _id: 'desc', status: 'desc' })
+            .sort({ status: 'desc', date: 'asc', _id: 'desc' })
             .skip(page * perPage - perPage)
             .limit(perPage)
             .populate(
