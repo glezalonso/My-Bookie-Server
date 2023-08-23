@@ -25,6 +25,7 @@ const {
     getMatchBookieOpen,
     getMatchesTodaySport,
     getMatchesPanel,
+    getMatchesH2H,
 } = require('../controllers/Match.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 
@@ -60,6 +61,8 @@ router.get('/today/:page/:date/:sport', getMatchesToday)
 router.get('/matchestoday/:date', getMatchesPanel)
 
 router.get('/todaybysport/:sport/:date', getMatchesTodaySport)
+
+router.get('/headtohead/:local/:away', getMatchesH2H)
 
 router.get('/openleague/:league/:limit', getMatchesOpenByLeague)
 

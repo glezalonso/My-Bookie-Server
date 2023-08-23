@@ -635,6 +635,32 @@ const getMatchesOpen = (req, res) => {
             })
         )
 }
+const getMatchesH2H = (req, res) => {
+    const { local, away } = req.params
+    console.log(local, away)
+    MatchModel.find({
+        status: false,
+        $or: [
+            {
+                $and: [{ local }, { away }],
+            },
+            {
+                $and: [{ local: away }, { away: local }],
+            },
+        ],
+    })
+        .populate('round season league local away sport votes.username', {
+            __v: 0,
+        })
+        .sort({ date: 'desc' })
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
+}
 
 const getMatchesClosed = (req, res) => {
     MatchModel.find({ status: false })
@@ -771,4 +797,5 @@ module.exports = {
     getMatchBookieOpen,
     getMatchesTodaySport,
     getMatchesPanel,
+    getMatchesH2H,
 }
