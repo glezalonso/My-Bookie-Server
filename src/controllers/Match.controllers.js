@@ -653,6 +653,7 @@ const getMatchesH2H = (req, res) => {
             __v: 0,
         })
         .sort({ date: 'desc' })
+        .limit(10)
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(501).json({
