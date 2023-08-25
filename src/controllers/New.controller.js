@@ -117,6 +117,29 @@ const getNewsBySport = (req, res) => {
             )
         )
 }
+const getNewsPerPage = async (req, res) => {
+    const page = parseInt(req.params.page)
+    const perPage = 11
+
+    const total = await NewModel.count({})
+
+    const totalPages = Math.ceil(total / perPage)
+
+    NewModel.find({})
+        .populate('author league')
+        .skip(page * perPage - perPage)
+        .limit(perPage)
+        .sort({ date: 'desc' })
+        .then((data) => res.status(200).json({ data, totalPages, page }))
+        .catch((error) =>
+            res
+                .status(505)
+                .json(
+                    { message: 'Ha ocurrido un error al mostrar las nocticas' },
+                    error
+                )
+        )
+}
 
 module.exports = {
     getNew,
@@ -125,4 +148,5 @@ module.exports = {
     updateNew,
     deleteNew,
     getNewsBySport,
+    getNewsPerPage,
 }
