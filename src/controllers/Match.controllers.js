@@ -56,6 +56,7 @@ const createMatch = (req, res) => {
         league,
         sport,
         status,
+        moreImportant,
     } = req.body
     const newMatch = new MatchModel({
         date,
@@ -70,6 +71,7 @@ const createMatch = (req, res) => {
         oddAway,
         oddOverUnder,
         oddDraw,
+        moreImportant,
     })
     newMatch
         .save()
@@ -97,6 +99,7 @@ const updateMatch = (req, res) => {
         league,
         status,
         sport,
+        moreImportant,
     } = req.body
     if (!ObjectId.isValid(id))
         return res.status(501).json({
@@ -117,6 +120,7 @@ const updateMatch = (req, res) => {
             oddAway,
             oddOverUnder,
             oddDraw,
+            moreImportant,
         },
         { new: true }
     )
@@ -426,12 +430,16 @@ const getMatchesToday = async (req, res) => {
 
     if (sport === 'all') {
         const total = await MatchModel.count({
+            moreImportant: true,
             date: { $regex: date, $options: 'i' },
         })
 
         const totalPages = Math.ceil(total / perPage)
 
-        MatchModel.find({ date: { $regex: date, $options: 'i' } })
+        MatchModel.find({
+            moreImportant: true,
+            date: { $regex: date, $options: 'i' },
+        })
             .sort({ status: 'desc', date: 'asc', _id: 'desc' })
             .skip(page * perPage - perPage)
             .limit(perPage)

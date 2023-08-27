@@ -97,6 +97,7 @@ const MatchModel = new Schema({
     oddAway: String,
     oddDraw: String,
     oddOverUnder: String,
+    moreImportant: Boolean,
 })
 
 module.exports = mongoose.model('Match', MatchModel)
