@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const BookieModel = require('../models/Bookies.model')
+const MessageModel = require('../models/Message.model')
 const ObjectId = require('mongoose').Types.ObjectId
 
 const register = async (req, res) => {
@@ -244,6 +245,20 @@ const getBookieTop = (req, res) => {
         )
 }
 
+const createMessage = (req, res) => {
+    const { email, subject, content } = req.body
+
+    const message = new MessageModel({
+        email,
+        subject,
+        content,
+    })
+    message
+        .save()
+        .then((data) => res.status(202).json(data))
+        .catch((error) => res.status(500).json(error))
+}
+
 module.exports = {
     loginBookie,
     register,
@@ -256,4 +271,5 @@ module.exports = {
     removeFollower,
     addAvatar,
     getBookieTop,
+    createMessage,
 }

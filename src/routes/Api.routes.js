@@ -6,7 +6,11 @@ const {
     verifyOTP,
     resetPassword,
 } = require('../controllers/Reset.controllers')
-const { loginBookie, register } = require('../controllers/Bookie.controllers')
+const {
+    loginBookie,
+    register,
+    createMessage,
+} = require('../controllers/Bookie.controllers')
 
 // path login, loginUser controller to validate login
 router.post('/login', loginUser)
@@ -20,5 +24,7 @@ router.put('/resetPassword', resetPassword)
 router.post('/loginBookie', loginBookie)
 // path register  in bookie page
 router.post('/registerBookie', register)
+
+router.post('/contact', createMessage)
 
 module.exports = router
