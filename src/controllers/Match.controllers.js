@@ -152,6 +152,7 @@ const deleteMatch = (req, res) => {
 const closeMatch = async (req, res) => {
     const { id } = req.params
     const { local, away } = req.body
+    const date = new Date().toISOString().slice(0, 10)
 
     if (!ObjectId.isValid(id))
         return res
@@ -181,21 +182,30 @@ const closeMatch = async (req, res) => {
             votesLocal.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { success: 1, total: 1 } }
+                    {
+                        $inc: { success: 1, total: 1 },
+                        $push: { matchesSuccess: { match: id, date } },
+                    }
                 )
             })
 
             votesAway.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { failures: 1, total: 1 } }
+                    {
+                        $inc: { failures: 1, total: 1 },
+                        $push: { matchesFailure: { match: id, date } },
+                    }
                 )
             })
 
             votesDraw.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { failures: 1, total: 1 } }
+                    {
+                        $inc: { failures: 1, total: 1 },
+                        $push: { matchesFailure: { match: id, date } },
+                    }
                 )
             })
 
@@ -217,20 +227,29 @@ const closeMatch = async (req, res) => {
             votesAway.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { success: 1, total: 1 } }
+                    {
+                        $inc: { success: 1, total: 1 },
+                        $push: { matchesSuccess: { match: id, date } },
+                    }
                 )
             })
 
             votesLocal.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { failures: 1, total: 1 } }
+                    {
+                        $inc: { failures: 1, total: 1 },
+                        $push: { matchesFailure: { match: id, date } },
+                    }
                 )
             })
             votesDraw.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { failures: 1, total: 1 } }
+                    {
+                        $inc: { failures: 1, total: 1 },
+                        $push: { matchesFailure: { match: id, date } },
+                    }
                 )
             })
             await SeasonModel.updateOne(
@@ -251,20 +270,29 @@ const closeMatch = async (req, res) => {
             votesAway.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { failures: 1, total: 1 } }
+                    {
+                        $inc: { failures: 1, total: 1 },
+                        $push: { matchesFailure: { match: id, date } },
+                    }
                 )
             })
 
             votesLocal.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { failures: 1, total: 1 } }
+                    {
+                        $inc: { failures: 1, total: 1 },
+                        $push: { matchesFailure: { match: id, date } },
+                    }
                 )
             })
             votesDraw.forEach(async (element) => {
                 await BookiesModel.findOneAndUpdate(
                     { _id: element.username },
-                    { $inc: { success: 1, total: 1 } }
+                    {
+                        $inc: { success: 1, total: 1 },
+                        $push: { matchesSuccess: { match: id, date } },
+                    }
                 )
             })
             await SeasonModel.updateOne(

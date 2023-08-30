@@ -259,6 +259,21 @@ const createMessage = (req, res) => {
         .catch((error) => res.status(500).json(error))
 }
 
+const getTopMonth = (req, res) => {
+    const { date } = req.params
+    BookieModel.find({
+        'matchesSuccess.date': { $regex: date, $options: 'i' },
+    })
+
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
+}
+
 module.exports = {
     loginBookie,
     register,
@@ -272,4 +287,5 @@ module.exports = {
     addAvatar,
     getBookieTop,
     createMessage,
+    getTopMonth,
 }

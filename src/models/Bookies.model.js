@@ -52,6 +52,28 @@ const bookieSchema = new Schema({
     failures: {
         type: Number,
     },
+    matchesSuccess: [
+        {
+            match: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Match',
+            },
+            date: {
+                type: String,
+            },
+        },
+    ],
+    matchesFailure: [
+        {
+            match: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Match',
+            },
+            date: {
+                type: String,
+            },
+        },
+    ],
 })
 
 module.exports = mongoose.model('Bookie', bookieSchema)

@@ -9,6 +9,7 @@ const {
     removeFollower,
     addAvatar,
     getBookieTop,
+    getTopMonth,
 } = require('../controllers/Bookie.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 const router = express.Router()
@@ -22,5 +23,6 @@ router.delete('/:id', verifyToken, deleteBookie)
 router.post('/follow/:id', verifyToken, addFollower)
 router.put('/follow/:id', verifyToken, removeFollower)
 router.put('/avatar/:id', verifyToken, addAvatar)
+router.get('/topmonth/:date', verifyToken, getTopMonth)
 
 module.exports = router
