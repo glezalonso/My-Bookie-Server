@@ -227,22 +227,34 @@ const addAvatar = (req, res) => {
         )
 }
 
-const getBookieTop = (req, res) => {
-    const { limit } = req.params
-    BookieModel.find(
-        { total: { $gte: 50 } },
-        { password: 0, __v: 0, email: 0, fullName: 0 }
-    )
-        .sort()
-        .limit(limit)
-        .populate('followers follow')
-        .then((data) => res.status(200).json(data))
-        .catch((error) =>
-            res.status(500).json({
-                message: 'Ha ocurrido un error al mostar los bookies',
-                error,
-            })
+const getBookieTop = async (req, res) => {
+    try {
+        const top = await BookieModel.find(
+            { total: { $gte: 50 } },
+            { password: 0, __v: 0, email: 0, fullName: 0 }
         )
+
+        if (top) {
+            const topUsers = top
+                ?.sort(
+                    (a, b) =>
+                        (b?.success * 100) / b?.total -
+                        (a?.success * 100) / a?.total
+                )
+                .slice(0, 10)
+
+            res.status(200).json(topUsers)
+        } else {
+            res.status(400).json({
+                message: 'No hay top',
+            })
+        }
+    } catch (error) {
+        res.status(501).json({
+            message: 'Ha ocurrido un error al mostrarlos juegos',
+            error,
+        })
+    }
 }
 
 const createMessage = (req, res) => {
@@ -259,19 +271,38 @@ const createMessage = (req, res) => {
         .catch((error) => res.status(500).json(error))
 }
 
-const getTopMonth = (req, res) => {
+const getTopMonth = async (req, res) => {
     const { date } = req.params
-    BookieModel.find({
-        'matchesSuccess.date': { $regex: date, $options: 'i' },
-    })
+    try {
+        const top = await BookieModel.find({
+            'matchesSuccess.date': { $regex: date, $options: 'i' },
+        })
 
-        .then((data) => res.status(200).json(data))
-        .catch((error) =>
-            res.status(501).json({
-                message: 'Ha ocurrido un error al mostrarlos juegos',
-                error,
+        if (top) {
+            const topUsers = top
+                ?.sort(
+                    (a, b) =>
+                        (b?.matchesSuccess?.length * 100) /
+                            (b?.matchesSuccess?.length +
+                                b?.matchesFailure?.length) -
+                        (a?.matchesSuccess?.length * 100) /
+                            (a?.matchesSuccess?.length +
+                                a?.matchesFailure?.length)
+                )
+                .slice(0, 10)
+
+            res.status(200).json(topUsers)
+        } else {
+            res.status(400).json({
+                message: 'No hay top',
             })
-        )
+        }
+    } catch (error) {
+        res.status(501).json({
+            message: 'Ha ocurrido un error al mostrarlos juegos',
+            error,
+        })
+    }
 }
 
 module.exports = {
