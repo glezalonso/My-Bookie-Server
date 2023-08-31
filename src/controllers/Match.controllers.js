@@ -152,7 +152,6 @@ const deleteMatch = (req, res) => {
 const closeMatch = async (req, res) => {
     const { id } = req.params
     const { local, away } = req.body
-    const date = new Date().toISOString().slice(0, 10)
 
     if (!ObjectId.isValid(id))
         return res
@@ -167,6 +166,8 @@ const closeMatch = async (req, res) => {
         const { local: localId, away: awayId, season: seasonId } = placeScore
 
         const userVotes = await MatchModel.findOne({ _id: id })
+
+        const date = userVotes.date.slice(0, 10)
 
         const votesAway = userVotes.votes.filter(
             (data) => data.option === 'away'
@@ -673,7 +674,7 @@ const getMatchesOpen = (req, res) => {
 }
 const getMatchesH2H = (req, res) => {
     const { local, away } = req.params
-    console.log(local, away)
+
     MatchModel.find({
         status: false,
         $or: [
