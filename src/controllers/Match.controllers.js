@@ -185,7 +185,13 @@ const closeMatch = async (req, res) => {
                     { _id: element.username },
                     {
                         $inc: { success: 1, total: 1 },
-                        $push: { matchesSuccess: { match: id, date } },
+                        $push: {
+                            matchesSuccess: {
+                                match: id,
+                                date,
+                                sport: userVotes.sport,
+                            },
+                        },
                     }
                 )
             })
@@ -195,7 +201,13 @@ const closeMatch = async (req, res) => {
                     { _id: element.username },
                     {
                         $inc: { failures: 1, total: 1 },
-                        $push: { matchesFailure: { match: id, date } },
+                        $push: {
+                            matchesFailure: {
+                                match: id,
+                                date,
+                                sport: userVotes.sport,
+                            },
+                        },
                     }
                 )
             })
@@ -205,7 +217,13 @@ const closeMatch = async (req, res) => {
                     { _id: element.username },
                     {
                         $inc: { failures: 1, total: 1 },
-                        $push: { matchesFailure: { match: id, date } },
+                        $push: {
+                            matchesFailure: {
+                                match: id,
+                                date,
+                                sport: userVotes.sport,
+                            },
+                        },
                     }
                 )
             })
@@ -230,7 +248,13 @@ const closeMatch = async (req, res) => {
                     { _id: element.username },
                     {
                         $inc: { success: 1, total: 1 },
-                        $push: { matchesSuccess: { match: id, date } },
+                        $push: {
+                            matchesSuccess: {
+                                match: id,
+                                date,
+                                sport: userVotes.sport,
+                            },
+                        },
                     }
                 )
             })
@@ -240,7 +264,13 @@ const closeMatch = async (req, res) => {
                     { _id: element.username },
                     {
                         $inc: { failures: 1, total: 1 },
-                        $push: { matchesFailure: { match: id, date } },
+                        $push: {
+                            matchesFailure: {
+                                match: id,
+                                date,
+                                sport: userVotes.sport,
+                            },
+                        },
                     }
                 )
             })
@@ -249,7 +279,13 @@ const closeMatch = async (req, res) => {
                     { _id: element.username },
                     {
                         $inc: { failures: 1, total: 1 },
-                        $push: { matchesFailure: { match: id, date } },
+                        $push: {
+                            matchesFailure: {
+                                match: id,
+                                date,
+                                sport: userVotes.sport,
+                            },
+                        },
                     }
                 )
             })
@@ -273,7 +309,13 @@ const closeMatch = async (req, res) => {
                     { _id: element.username },
                     {
                         $inc: { failures: 1, total: 1 },
-                        $push: { matchesFailure: { match: id, date } },
+                        $push: {
+                            matchesFailure: {
+                                match: id,
+                                date,
+                                sport: userVotes.sport,
+                            },
+                        },
                     }
                 )
             })
@@ -283,7 +325,13 @@ const closeMatch = async (req, res) => {
                     { _id: element.username },
                     {
                         $inc: { failures: 1, total: 1 },
-                        $push: { matchesFailure: { match: id, date } },
+                        $push: {
+                            matchesFailure: {
+                                match: id,
+                                date,
+                                sport: userVotes.sport,
+                            },
+                        },
                     }
                 )
             })
@@ -292,7 +340,13 @@ const closeMatch = async (req, res) => {
                     { _id: element.username },
                     {
                         $inc: { success: 1, total: 1 },
-                        $push: { matchesSuccess: { match: id, date } },
+                        $push: {
+                            matchesSuccess: {
+                                match: id,
+                                date,
+                                sport: userVotes.sport,
+                            },
+                        },
                     }
                 )
             })

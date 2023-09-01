@@ -69,6 +69,10 @@ const bookieSchema = new Schema({
                 type: mongoose.SchemaTypes.ObjectId,
                 ref: 'Match',
             },
+            sport: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Sport',
+            },
             date: {
                 type: String,
             },
