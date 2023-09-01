@@ -171,6 +171,12 @@ const closeMatch = async (req, res) => {
 
         const sport = userVotes.sport.toString()
 
+        const round = userVotes.round.toString()
+
+        const season = userVotes.season.toString()
+
+        const league = userVotes.league.toString()
+
         const votesAway = userVotes.votes.filter(
             (data) => data.option === 'away'
         )
@@ -192,6 +198,9 @@ const closeMatch = async (req, res) => {
                                 match: id,
                                 date,
                                 sport,
+                                round,
+                                season,
+                                league,
                             },
                         },
                     }
@@ -208,6 +217,9 @@ const closeMatch = async (req, res) => {
                                 match: id,
                                 date,
                                 sport,
+                                round,
+                                season,
+                                league,
                             },
                         },
                     }
@@ -224,6 +236,9 @@ const closeMatch = async (req, res) => {
                                 match: id,
                                 date,
                                 sport,
+                                round,
+                                season,
+                                league,
                             },
                         },
                     }
@@ -255,6 +270,9 @@ const closeMatch = async (req, res) => {
                                 match: id,
                                 date,
                                 sport,
+                                round,
+                                season,
+                                league,
                             },
                         },
                     }
@@ -271,6 +289,9 @@ const closeMatch = async (req, res) => {
                                 match: id,
                                 date,
                                 sport,
+                                round,
+                                season,
+                                league,
                             },
                         },
                     }
@@ -286,6 +307,9 @@ const closeMatch = async (req, res) => {
                                 match: id,
                                 date,
                                 sport,
+                                round,
+                                season,
+                                league,
                             },
                         },
                     }
@@ -316,6 +340,9 @@ const closeMatch = async (req, res) => {
                                 match: id,
                                 date,
                                 sport,
+                                round,
+                                season,
+                                league,
                             },
                         },
                     }
@@ -332,6 +359,9 @@ const closeMatch = async (req, res) => {
                                 match: id,
                                 date,
                                 sport,
+                                round,
+                                season,
+                                league,
                             },
                         },
                     }
@@ -347,6 +377,9 @@ const closeMatch = async (req, res) => {
                                 match: id,
                                 date,
                                 sport,
+                                round,
+                                season,
+                                league,
                             },
                         },
                     }

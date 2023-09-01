@@ -62,6 +62,18 @@ const bookieSchema = new Schema({
                 type: mongoose.SchemaTypes.ObjectId,
                 ref: 'Sport',
             },
+            round: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Round',
+            },
+            season: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Season',
+            },
+            league: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'League',
+            },
             date: {
                 type: String,
             },
@@ -76,6 +88,18 @@ const bookieSchema = new Schema({
             sport: {
                 type: mongoose.SchemaTypes.ObjectId,
                 ref: 'Sport',
+            },
+            round: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Round',
+            },
+            season: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'Season',
+            },
+            league: {
+                type: mongoose.SchemaTypes.ObjectId,
+                ref: 'League',
             },
             date: {
                 type: String,
