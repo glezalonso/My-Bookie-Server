@@ -169,6 +169,8 @@ const closeMatch = async (req, res) => {
 
         const date = userVotes.date.slice(0, 10)
 
+        const sport = userVotes.sport.toString()
+
         const votesAway = userVotes.votes.filter(
             (data) => data.option === 'away'
         )
@@ -189,7 +191,7 @@ const closeMatch = async (req, res) => {
                             matchesSuccess: {
                                 match: id,
                                 date,
-                                sport: userVotes.sport,
+                                sport,
                             },
                         },
                     }
@@ -205,7 +207,7 @@ const closeMatch = async (req, res) => {
                             matchesFailure: {
                                 match: id,
                                 date,
-                                sport: userVotes.sport,
+                                sport,
                             },
                         },
                     }
@@ -221,7 +223,7 @@ const closeMatch = async (req, res) => {
                             matchesFailure: {
                                 match: id,
                                 date,
-                                sport: userVotes.sport,
+                                sport,
                             },
                         },
                     }
@@ -252,7 +254,7 @@ const closeMatch = async (req, res) => {
                             matchesSuccess: {
                                 match: id,
                                 date,
-                                sport: userVotes.sport,
+                                sport,
                             },
                         },
                     }
@@ -268,7 +270,7 @@ const closeMatch = async (req, res) => {
                             matchesFailure: {
                                 match: id,
                                 date,
-                                sport: userVotes.sport,
+                                sport,
                             },
                         },
                     }
@@ -283,7 +285,7 @@ const closeMatch = async (req, res) => {
                             matchesFailure: {
                                 match: id,
                                 date,
-                                sport: userVotes.sport,
+                                sport,
                             },
                         },
                     }
@@ -313,7 +315,7 @@ const closeMatch = async (req, res) => {
                             matchesFailure: {
                                 match: id,
                                 date,
-                                sport: userVotes.sport,
+                                sport,
                             },
                         },
                     }
@@ -329,7 +331,7 @@ const closeMatch = async (req, res) => {
                             matchesFailure: {
                                 match: id,
                                 date,
-                                sport: userVotes.sport,
+                                sport,
                             },
                         },
                     }
@@ -344,7 +346,7 @@ const closeMatch = async (req, res) => {
                             matchesSuccess: {
                                 match: id,
                                 date,
-                                sport: userVotes.sport,
+                                sport,
                             },
                         },
                     }
