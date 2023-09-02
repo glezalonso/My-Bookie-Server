@@ -305,7 +305,7 @@ const getTopMonth = async (req, res) => {
                                         (match) =>
                                             match?.date?.slice(0, 7) === date
                                     )?.length) &&
-                        a.matchesSuccess.length > minimun
+                        a.matchesSuccess.length >= minimun
                 )
                 .slice(0, 10)
 
