@@ -273,7 +273,7 @@ const createMessage = (req, res) => {
 
 const getTopMonth = async (req, res) => {
     const { date } = req.params
-    const minimun = new Date().getDate() * 3
+    const minimun = new Date().getDate() * 1
 
     try {
         const top = await BookieModel.find({
