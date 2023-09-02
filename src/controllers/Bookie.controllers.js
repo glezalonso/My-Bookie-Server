@@ -273,12 +273,13 @@ const createMessage = (req, res) => {
 
 const getTopMonth = async (req, res) => {
     const { date } = req.params
-    const minimun = new Date().getDate() * 1
+    // const minimun = new Date().getDate() * 1
 
     try {
         const top = await BookieModel.find({
             'matchesSuccess.date': { $regex: date, $options: 'i' },
-        }).sort({ matchesSuccess: -1 })
+        })
+        // .sort({ matchesSuccess: -1 })
 
         if (top) {
             const topUsers = top
@@ -294,18 +295,17 @@ const getTopMonth = async (req, res) => {
                                 b?.matchesFailure?.filter(
                                     (match) => match?.date?.slice(0, 7) === date
                                 )?.length) -
+                        (a?.matchesSuccess?.filter(
+                            (match) => match?.date?.slice(0, 7) === date
+                        )?.length *
+                            100) /
                             (a?.matchesSuccess?.filter(
                                 (match) => match?.date?.slice(0, 7) === date
-                            )?.length *
-                                100) /
-                                (a?.matchesSuccess?.filter(
+                            )?.length +
+                                a?.matchesFailure?.filter(
                                     (match) => match?.date?.slice(0, 7) === date
-                                )?.length +
-                                    a?.matchesFailure?.filter(
-                                        (match) =>
-                                            match?.date?.slice(0, 7) === date
-                                    )?.length) &&
-                        a.matchesSuccess.length >= minimun
+                                )?.length) // &&
+                    // a.matchesSuccess.length >= minimun
                 )
                 .slice(0, 10)
 
