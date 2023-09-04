@@ -273,13 +273,12 @@ const createMessage = (req, res) => {
 
 const getTopMonth = async (req, res) => {
     const { date } = req.params
-    // const minimun = new Date().getDate() * 1
+    // const minimun = new Date().getDate() * 3
 
     try {
         const top = await BookieModel.find({
             'matchesSuccess.date': { $regex: date, $options: 'i' },
         })
-        // .sort({ matchesSuccess: -1 })
 
         if (top) {
             const topUsers = top
@@ -304,10 +303,98 @@ const getTopMonth = async (req, res) => {
                             )?.length +
                                 a?.matchesFailure?.filter(
                                     (match) => match?.date?.slice(0, 7) === date
-                                )?.length) // &&
-                    // a.matchesSuccess.length >= minimun
+                                )?.length)
                 )
                 .slice(0, 10)
+
+            res.status(200).json(topUsers)
+        } else {
+            res.status(400).json({
+                message: 'No hay top',
+            })
+        }
+    } catch (error) {
+        res.status(501).json({
+            message: 'Ha ocurrido un error al mostrarlos juegos',
+            error,
+        })
+    }
+}
+
+const getTopMonthSport = async (req, res) => {
+    const { date, sport } = req.params
+    // const minimun = new Date().getDate() * 3
+
+    try {
+        const top = await BookieModel.find({
+            $or: [
+                {
+                    matchesSuccess: {
+                        $elemMatch: {
+                            sport,
+                            date: { $regex: date },
+                        },
+                    },
+                },
+                {
+                    matchesFailure: {
+                        $elemMatch: {
+                            sport,
+                            date: { $regex: date },
+                        },
+                    },
+                },
+            ],
+        })
+
+        if (top) {
+            const topUsers = top?.sort(
+                (a, b) =>
+                    (Number(
+                        b?.matchesSuccess?.filter(
+                            (match) =>
+                                match?.date?.slice(0, 7) === date &&
+                                match?.sport === sport?._id
+                        )?.length
+                    ) *
+                        100) /
+                        (Number(
+                            b?.matchesSuccess?.filter(
+                                (match) =>
+                                    match?.date?.slice(0, 7) === date &&
+                                    match?.sport === sport?._id
+                            )?.length
+                        ) +
+                            Number(
+                                b?.matchesFailure?.filter(
+                                    (match) =>
+                                        match?.date?.slice(0, 7) === date &&
+                                        match?.sport === sport?._id
+                                )?.length
+                            )) -
+                    (Number(
+                        a?.matchesSuccess?.filter(
+                            (match) =>
+                                match?.date?.slice(0, 7) === date &&
+                                match?.sport === sport?._id
+                        )?.length
+                    ) *
+                        100) /
+                        (Number(
+                            a?.matchesSuccess?.filter(
+                                (match) =>
+                                    match?.date?.slice(0, 7) === date &&
+                                    match?.sport === sport?._id
+                            )?.length
+                        ) +
+                            Number(
+                                a?.matchesFailure?.filter(
+                                    (match) =>
+                                        match?.date?.slice(0, 7) === date &&
+                                        match?.sport === sport?._id
+                                )?.length
+                            ))
+            )
 
             res.status(200).json(topUsers)
         } else {
@@ -337,4 +424,5 @@ module.exports = {
     getBookieTop,
     createMessage,
     getTopMonth,
+    getTopMonthSport,
 }
