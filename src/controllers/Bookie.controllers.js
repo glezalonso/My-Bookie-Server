@@ -410,6 +410,26 @@ const getTopMonthSport = async (req, res) => {
     }
 }
 
+const getBookiesPage = async (req, res) => {
+    const page = parseInt(req.params.page)
+    const perPage = 11
+
+    const total = await BookieModel.count({})
+
+    const totalPages = Math.ceil(total / perPage)
+    BookieModel.find({})
+        .populate('followers follow')
+        .skip(page * perPage - perPage)
+        .limit(perPage)
+        .then((data) => res.status(200).json({ data, page, total, totalPages }))
+        .catch((error) =>
+            res.status(500).json({
+                message: 'Ha ocurrido un error al mostar los bookies',
+                error,
+            })
+        )
+}
+
 module.exports = {
     loginBookie,
     register,
@@ -425,4 +445,5 @@ module.exports = {
     createMessage,
     getTopMonth,
     getTopMonthSport,
+    getBookiesPage,
 }

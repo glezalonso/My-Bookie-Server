@@ -26,6 +26,7 @@ const {
     getMatchesTodaySport,
     getMatchesPanel,
     getMatchesH2H,
+    trendMatch,
 } = require('../controllers/Match.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 
@@ -79,5 +80,7 @@ router.get('/open', getMatchesOpen)
 router.get('/closed', getMatchesClosed)
 
 router.get('/nextmatches/sport/:sport', getNextMatchesBySport)
+
+router.get(`/trendmatch/:date`, trendMatch)
 
 module.exports = router

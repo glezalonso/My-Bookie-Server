@@ -899,6 +899,26 @@ const getMatchBookieOpen = (req, res) => {
         )
 }
 
+const trendMatch = async (req, res) => {
+    const { date } = req.params
+    try {
+        const matches = await MatchModel.find({
+            moreImportant: true,
+            date: { $regex: date, $options: 'i' },
+        })
+        matches.sort((a, b) => b.votes.length - a.votes.length)
+
+        const trends = matches.slice(0, 1)
+
+        res.status(200).json(trends)
+    } catch (error) {
+        res.status(501).json({
+            message: 'Ha ocurrido un error al mostrarlos juegos',
+            error,
+        })
+    }
+}
+
 module.exports = {
     getMatches,
     getMatch,
@@ -925,4 +945,5 @@ module.exports = {
     getMatchesTodaySport,
     getMatchesPanel,
     getMatchesH2H,
+    trendMatch,
 }
