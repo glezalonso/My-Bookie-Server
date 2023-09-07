@@ -412,7 +412,7 @@ const getTopMonthSport = async (req, res) => {
 
 const getBookiesPage = async (req, res) => {
     const page = parseInt(req.params.page)
-    const perPage = 11
+    const perPage = 22
 
     const total = await BookieModel.count({})
 
