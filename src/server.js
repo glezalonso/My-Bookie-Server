@@ -37,6 +37,7 @@ app.use(
             process.env.CLIENT,
             process.env.LANDING,
             'http://localhost:5174',
+            'https://mi-bookie-landing.vercel.app/',
         ],
         credentials: true,
     })
