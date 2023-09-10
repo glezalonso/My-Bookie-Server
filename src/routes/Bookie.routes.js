@@ -12,6 +12,7 @@ const {
     getTopMonth,
     getTopMonthSport,
     getBookiesPage,
+    getBookieChampion,
 } = require('../controllers/Bookie.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 const router = express.Router()
@@ -28,5 +29,6 @@ router.put('/avatar/:id', verifyToken, addAvatar)
 router.get('/topmonth/:date', verifyToken, getTopMonth)
 router.get('/topmonthsport/:date/:sport', verifyToken, getTopMonthSport)
 router.get('/page/:page', verifyToken, getBookiesPage)
+router.get('/tournament/:season', getBookieChampion)
 
 module.exports = router

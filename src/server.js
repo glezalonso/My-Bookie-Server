@@ -17,6 +17,7 @@ const matchRoutes = require('./routes/Match.routes')
 const roundRoutes = require('./routes/Round.routes')
 const bookieRoutes = require('./routes/Bookie.routes')
 const newRoutes = require('./routes/New.routes')
+const tournamentRoutes = require('./routes/Tournament.routes')
 const fileUpload = require('express-fileupload')
 
 const app = express()
@@ -37,7 +38,6 @@ app.use(
             process.env.CLIENT,
             process.env.LANDING,
             'http://localhost:5174',
-            'https://mi-bookie-landing.vercel.app/',
         ],
         credentials: true,
     })
@@ -63,6 +63,7 @@ app.use('/api/matches', matchRoutes)
 app.use('/api/rounds', roundRoutes)
 app.use('/api/bookies', bookieRoutes)
 app.use('/api/news', newRoutes)
+app.use('/api/tournaments', tournamentRoutes)
 app.get('/*', (req, res) =>
     res.status(404).json({ message: 'Ruta no encontrada' })
 )

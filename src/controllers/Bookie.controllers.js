@@ -430,6 +430,48 @@ const getBookiesPage = async (req, res) => {
         )
 }
 
+const getBookieChampion = async (req, res) => {
+    const { season } = req.params
+    try {
+        const data = await BookieModel.find({
+            $or: [
+                {
+                    matchesSuccess: {
+                        $elemMatch: {
+                            season,
+                        },
+                    },
+                },
+                {
+                    matchesFailure: {
+                        $elemMatch: {
+                            season,
+                        },
+                    },
+                },
+            ],
+        })
+
+        const top = data?.filter(
+            (user) =>
+                user.matchesSuccess.filter(
+                    (match) => String(match.season) === season
+                ).length +
+                    user.matchesFailure.filter(
+                        (match) => String(match.season) === season
+                    ).length >
+                15
+        )
+
+        res.json(top)
+    } catch (error) {
+        res.status(500).json({
+            message: 'Ha ocurrido un error al mostar los bookies',
+            error,
+        })
+    }
+}
+
 module.exports = {
     loginBookie,
     register,
@@ -446,4 +488,5 @@ module.exports = {
     getTopMonth,
     getTopMonthSport,
     getBookiesPage,
+    getBookieChampion,
 }
