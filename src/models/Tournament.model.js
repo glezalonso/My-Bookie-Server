@@ -2,8 +2,9 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const TournamentModel = new Schema({
-    league: {
+    season: {
         type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Season',
         required: [true, 'Este campo es requerido'],
     },
     status: {
