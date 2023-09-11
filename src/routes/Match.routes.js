@@ -21,12 +21,11 @@ const {
     getMatchesOpenByLeague,
     getMatchesClosedByLeague,
     pickem,
-    getMatchBookieClosed,
-    getMatchBookieOpen,
     getMatchesTodaySport,
     getMatchesPanel,
     getMatchesH2H,
     trendMatch,
+    getMatchBookie,
 } = require('../controllers/Match.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 
@@ -53,9 +52,7 @@ router.put('/removeComment/:id', verifyToken, removeComment)
 router.post('/pickem', verifyToken, pickem)
 
 // Extra endpoints
-router.get(`/matchbookieclosed/:id/:limit`, verifyToken, getMatchBookieClosed)
-
-router.get(`/matchbookieopen/:id/:limit`, verifyToken, getMatchBookieOpen)
+router.get(`/matchbookie/:id/:status/:page`, verifyToken, getMatchBookie)
 
 router.get('/today/:page/:date/:sport', getMatchesToday)
 

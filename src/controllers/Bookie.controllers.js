@@ -323,7 +323,6 @@ const getTopMonth = async (req, res) => {
 
 const getTopMonthSport = async (req, res) => {
     const { date, sport } = req.params
-    // const minimun = new Date().getDate() * 3
 
     try {
         const top = await BookieModel.find({
@@ -432,6 +431,10 @@ const getBookiesPage = async (req, res) => {
 
 const getBookieChampion = async (req, res) => {
     const { season } = req.params
+    const minimun =
+        new Date().getDate() > 10
+            ? new Date().getDate()
+            : new Date().getDate() - 7
     try {
         const data = await BookieModel.find({
             $or: [
@@ -460,7 +463,7 @@ const getBookieChampion = async (req, res) => {
                     user.matchesFailure.filter(
                         (match) => String(match.season) === season
                     ).length >
-                15
+                minimun
         )
 
         res.json(top)

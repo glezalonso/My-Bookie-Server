@@ -4,6 +4,7 @@ const ObjectId = require('mongoose').Types.ObjectId
 const getTournaments = (req, res) => {
     TournamentModel.find({})
         .populate('season')
+        .sort({ status: -1 })
         .then((data) => res.status(200).json(data || []))
         .catch((error) =>
             res.status(500).json({

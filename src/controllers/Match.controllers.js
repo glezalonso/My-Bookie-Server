@@ -859,38 +859,28 @@ const pickem = async (req, res) => {
         )
 }
 
-const getMatchBookieClosed = (req, res) => {
-    const { id, limit } = req.params
+const getMatchBookie = async (req, res) => {
+    const { id, status } = req.params
+    const page = parseInt(req.params.page)
+    const perPage = 15
 
+    const total = await MatchModel.count({
+        votes: { $elemMatch: { username: id } },
+        status,
+    })
+
+    const totalPages = Math.ceil(total / perPage)
     MatchModel.find({
         votes: { $elemMatch: { username: id } },
-        status: false,
+        status,
     })
         .populate('round season league local away sport votes.username', {
             __v: 0,
         })
-        .sort({ date: 'desc' })
-        .limit(limit)
-        .then((data) => res.status(200).json(data))
-        .catch((error) =>
-            res.status(501).json({
-                message: 'Ha ocurrido un error al mostrarlos juegos',
-                error,
-            })
-        )
-}
-const getMatchBookieOpen = (req, res) => {
-    const { id, limit } = req.params
-    MatchModel.find({
-        votes: { $elemMatch: { username: id } },
-        status: true,
-    })
-        .populate('round season league local away sport votes.username', {
-            __v: 0,
-        })
-        .sort({ date: 'asc' })
-        .limit(limit)
-        .then((data) => res.status(200).json(data))
+        .sort({ status: 'desc', date: 'desc', _id: 'desc' })
+        .skip(page * perPage - perPage)
+        .limit(perPage)
+        .then((data) => res.status(200).json({ data, page, totalPages }))
         .catch((error) =>
             res.status(501).json({
                 message: 'Ha ocurrido un error al mostrarlos juegos',
@@ -940,10 +930,9 @@ module.exports = {
     getMatchesByTeam,
     getNextMatchesBySport,
     pickem,
-    getMatchBookieClosed,
-    getMatchBookieOpen,
     getMatchesTodaySport,
     getMatchesPanel,
     getMatchesH2H,
     trendMatch,
+    getMatchBookie,
 }
