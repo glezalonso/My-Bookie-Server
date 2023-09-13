@@ -273,12 +273,23 @@ const createMessage = (req, res) => {
 
 const getTopMonth = async (req, res) => {
     const { date } = req.params
-    // const minimun = new Date().getDate() * 3
+    const minimun = new Date().getDate()
 
     try {
-        const top = await BookieModel.find({
+        const data = await BookieModel.find({
             'matchesSuccess.date': { $regex: date, $options: 'i' },
         })
+
+        const top = data?.filter(
+            (user) =>
+                user.matchesSuccess.filter(
+                    (match) => match?.date?.slice(0, 7) === date
+                ).length +
+                    user.matchesFailure.filter(
+                        (match) => match?.date?.slice(0, 7) === date
+                    ).length >
+                minimun
+        )
 
         if (top) {
             const topUsers = top
@@ -323,9 +334,10 @@ const getTopMonth = async (req, res) => {
 
 const getTopMonthSport = async (req, res) => {
     const { date, sport } = req.params
+    const minimun = new Date().getDate()
 
     try {
-        const top = await BookieModel.find({
+        const data = await BookieModel.find({
             $or: [
                 {
                     matchesSuccess: {
@@ -346,6 +358,21 @@ const getTopMonthSport = async (req, res) => {
             ],
         })
 
+        const top = data?.filter(
+            (user) =>
+                user.matchesSuccess.filter(
+                    (match) =>
+                        match?.date?.slice(0, 7) === date &&
+                        String(match?.sport) === sport
+                ).length +
+                    user.matchesFailure.filter(
+                        (match) =>
+                            match?.date?.slice(0, 7) === date &&
+                            String(match?.sport) === sport
+                    ).length >
+                minimun
+        )
+
         if (top) {
             const topUsers = top?.sort(
                 (a, b) =>
@@ -353,7 +380,7 @@ const getTopMonthSport = async (req, res) => {
                         b?.matchesSuccess?.filter(
                             (match) =>
                                 match?.date?.slice(0, 7) === date &&
-                                match?.sport === sport?._id
+                                String(match?.sport) === sport
                         )?.length
                     ) *
                         100) /
@@ -361,21 +388,21 @@ const getTopMonthSport = async (req, res) => {
                             b?.matchesSuccess?.filter(
                                 (match) =>
                                     match?.date?.slice(0, 7) === date &&
-                                    match?.sport === sport?._id
+                                    String(match?.sport) === sport
                             )?.length
                         ) +
                             Number(
                                 b?.matchesFailure?.filter(
                                     (match) =>
                                         match?.date?.slice(0, 7) === date &&
-                                        match?.sport === sport?._id
+                                        String(match?.sport) === sport
                                 )?.length
                             )) -
                     (Number(
                         a?.matchesSuccess?.filter(
                             (match) =>
                                 match?.date?.slice(0, 7) === date &&
-                                match?.sport === sport?._id
+                                String(match?.sport) === sport
                         )?.length
                     ) *
                         100) /
@@ -383,14 +410,14 @@ const getTopMonthSport = async (req, res) => {
                             a?.matchesSuccess?.filter(
                                 (match) =>
                                     match?.date?.slice(0, 7) === date &&
-                                    match?.sport === sport?._id
+                                    String(match?.sport) === sport
                             )?.length
                         ) +
                             Number(
                                 a?.matchesFailure?.filter(
                                     (match) =>
                                         match?.date?.slice(0, 7) === date &&
-                                        match?.sport === sport?._id
+                                        String(match?.sport) === sport
                                 )?.length
                             ))
             )
@@ -431,10 +458,8 @@ const getBookiesPage = async (req, res) => {
 
 const getBookieChampion = async (req, res) => {
     const { season } = req.params
-    const minimun =
-        new Date().getDate() > 10
-            ? new Date().getDate()
-            : new Date().getDate() - 7
+    const minimun = 10
+
     try {
         const data = await BookieModel.find({
             $or: [
@@ -466,7 +491,32 @@ const getBookieChampion = async (req, res) => {
                 minimun
         )
 
-        res.json(top)
+        const winners = top?.sort((a, b) => {
+            return (
+                (b?.matchesSuccess?.filter(
+                    (match) => String(match?.season) === season
+                )?.length *
+                    100) /
+                    (b?.matchesSuccess?.filter(
+                        (match) => String(match?.season) === season
+                    )?.length +
+                        b?.matchesFailure?.filter(
+                            (match) => String(match?.season) === season
+                        )?.length) -
+                (a?.matchesSuccess?.filter(
+                    (match) => String(match?.season) === season
+                )?.length *
+                    100) /
+                    (a?.matchesSuccess?.filter(
+                        (match) => String(match?.season) === season
+                    )?.length +
+                        a?.matchesFailure?.filter(
+                            (match) => String(match?.season) === season
+                        )?.length || b?.matchesSuccess - a?.matchesSuccess)
+            )
+        })
+
+        res.status(200).json(winners)
     } catch (error) {
         res.status(500).json({
             message: 'Ha ocurrido un error al mostar los bookies',
