@@ -562,7 +562,7 @@ const getMatchesToday = async (req, res) => {
             .skip(page * perPage - perPage)
             .limit(perPage)
             .populate(
-                'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username',
+                'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username votes.username',
                 { __v: 0 }
             )
 
@@ -587,7 +587,7 @@ const getMatchesToday = async (req, res) => {
             .skip(page * perPage - perPage)
             .limit(perPage)
             .populate(
-                'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username',
+                'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username votes.username',
                 { __v: 0 }
             )
 
@@ -607,7 +607,7 @@ const getMatchesTodaySport = async (req, res) => {
     const { date, sport } = req.params
     MatchModel.find({ sport, date: { $regex: date, $options: 'i' } })
         .populate(
-            'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username',
+            'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username votes.username',
             { __v: 0 }
         )
         .sort({ date: 'asc' })
