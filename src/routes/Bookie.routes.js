@@ -29,6 +29,6 @@ router.put('/avatar/:id', verifyToken, addAvatar)
 router.get('/topmonth/:date', verifyToken, getTopMonth)
 router.get('/topmonthsport/:date/:sport', verifyToken, getTopMonthSport)
 router.get('/page/:page', verifyToken, getBookiesPage)
-router.get('/tournament/:season', getBookieChampion)
+router.get('/tournament/:season/:minimun', getBookieChampion)
 
 module.exports = router

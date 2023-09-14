@@ -11,6 +11,10 @@ const TournamentModel = new Schema({
         type: Boolean,
         required: [true, 'Este campo es requerido'],
     },
+    minimum: {
+        type: Number,
+        required: [true, 'Este campo es requerido'],
+    },
 })
 
 module.exports = mongoose.model('Tournament', TournamentModel)

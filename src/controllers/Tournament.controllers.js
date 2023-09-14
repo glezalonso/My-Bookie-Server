@@ -33,11 +33,12 @@ const getTournament = (req, res) => {
 }
 
 const createTournament = (req, res) => {
-    const { season, status } = req.body
+    const { season, status, minimum } = req.body
 
     const newTournament = new TournamentModel({
         season,
         status,
+        minimum,
     })
     newTournament
         .save()
@@ -52,13 +53,14 @@ const createTournament = (req, res) => {
 
 const updateTournament = (req, res) => {
     const { id } = req.params
-    const { season, status } = req.body
+    const { season, status, minimum } = req.body
 
     TournamentModel.findOneAndUpdate(
         { _id: id },
         {
             season,
             status,
+            minimum,
         },
         {
             new: true,

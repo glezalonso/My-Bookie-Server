@@ -457,8 +457,7 @@ const getBookiesPage = async (req, res) => {
 }
 
 const getBookieChampion = async (req, res) => {
-    const { season } = req.params
-    const minimun = 10
+    const { season, minimun } = req.params
 
     try {
         const data = await BookieModel.find({
