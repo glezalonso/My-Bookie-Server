@@ -18,14 +18,13 @@ const {
     getMatchesClosed,
     getMatchesByTeam,
     getNextMatchesBySport,
-    getMatchesOpenByLeague,
-    getMatchesClosedByLeague,
     pickem,
     getMatchesTodaySport,
     getMatchesPanel,
     getMatchesH2H,
     trendMatch,
     getMatchBookie,
+    getMatchesByLeague,
 } = require('../controllers/Match.controllers')
 const { verifyToken } = require('../middlewares/verifyToken')
 
@@ -62,9 +61,7 @@ router.get('/todaybysport/:sport/:date', getMatchesTodaySport)
 
 router.get('/headtohead/:local/:away', getMatchesH2H)
 
-router.get('/openleague/:league/:limit', getMatchesOpenByLeague)
-
-router.get('/closedleague/:league/:limit', getMatchesClosedByLeague)
+router.get('/league/:league/:limit/:status', getMatchesByLeague)
 
 router.get('/round/:round', getMatchesByRound)
 

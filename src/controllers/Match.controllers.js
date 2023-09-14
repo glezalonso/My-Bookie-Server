@@ -636,40 +636,21 @@ const getMatchesPanel = async (req, res) => {
         )
 }
 
-const getMatchesOpenByLeague = (req, res) => {
-    const { league, limit } = req.params
+const getMatchesByLeague = (req, res) => {
+    const { league, limit, status } = req.params
     if (!ObjectId.isValid(league))
         return res.status(501).json({
             messsage: 'Ha ocurrido un error en la peticion',
         })
-    MatchModel.find({ league, status: true })
-        .populate('round season league local away sport votes.username', {
-            __v: 0,
-        })
-        .limit(limit)
-        .sort({ date: 'asc' })
-        .then((data) => res.status(200).json(data))
-        .catch((error) =>
-            res.status(501).json({
-                message: 'Ha ocurrido un error al mostrarlos juegos',
-                error,
-            })
+    MatchModel.find({ league, status })
+        .populate(
+            'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username votes.username',
+            {
+                __v: 0,
+            }
         )
-}
-
-const getMatchesClosedByLeague = (req, res) => {
-    const { league, limit } = req.params
-    if (!ObjectId.isValid(league))
-        return res.status(501).json({
-            messsage: 'Ha ocurrido un error en la peticion',
-        })
-    MatchModel.find({ league, status: false })
-        .populate('round season league local away sport votes.username', {
-            __v: 0,
-            password: 0,
-        })
         .limit(limit)
-        .sort({ date: 'desc' })
+        .sort(status ? { date: 'asc' } : { data: 'desc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(501).json({
@@ -921,8 +902,7 @@ module.exports = {
     addComment,
     removeComment,
     getMatchesToday,
-    getMatchesOpenByLeague,
-    getMatchesClosedByLeague,
+    getMatchesByLeague,
     getMatchesByRound,
     getMatchesBySeason,
     getMatchesClosed,
