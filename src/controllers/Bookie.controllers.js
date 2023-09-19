@@ -71,7 +71,7 @@ const loginBookie = async (req, res) => {
 
 const getBookies = (req, res) => {
     BookieModel.find({})
-        .populate('followers follow')
+        .populate('followers follow tournaments')
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(500).json({
@@ -88,7 +88,7 @@ const getBookie = (req, res) => {
             messsage: 'Ha ocurrido un error en la peticion',
         })
     BookieModel.findOne({ _id: id })
-        .populate('followers follow')
+        .populate('followers follow tournaments')
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(500).json({

@@ -544,7 +544,7 @@ const removeComment = (req, res) => {
 const getMatchesToday = async (req, res) => {
     const { date, sport } = req.params
     const page = parseInt(req.params.page)
-    const perPage = 11
+    const perPage = 8
 
     if (sport === 'all') {
         const total = await MatchModel.count({
