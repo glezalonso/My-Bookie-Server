@@ -524,6 +524,74 @@ const getBookieChampion = async (req, res) => {
     }
 }
 
+const getBookieChampionRound = async (req, res) => {
+    const { round, minimun } = req.params
+
+    try {
+        const data = await BookieModel.find({
+            $or: [
+                {
+                    matchesSuccess: {
+                        $elemMatch: {
+                            round,
+                        },
+                    },
+                },
+                {
+                    matchesFailure: {
+                        $elemMatch: {
+                            round,
+                        },
+                    },
+                },
+            ],
+        })
+
+        const top = data?.filter(
+            (user) =>
+                user.matchesSuccess.filter(
+                    (match) => String(match.round) === round
+                ).length +
+                    user.matchesFailure.filter(
+                        (match) => String(match.round) === round
+                    ).length >
+                minimun
+        )
+
+        const winners = top?.sort((a, b) => {
+            return (
+                (b?.matchesSuccess?.filter(
+                    (match) => String(match?.round) === round
+                )?.length *
+                    100) /
+                    (b?.matchesSuccess?.filter(
+                        (match) => String(match?.round) === round
+                    )?.length +
+                        b?.matchesFailure?.filter(
+                            (match) => String(match?.round) === round
+                        )?.length) -
+                (a?.matchesSuccess?.filter(
+                    (match) => String(match?.round) === round
+                )?.length *
+                    100) /
+                    (a?.matchesSuccess?.filter(
+                        (match) => String(match?.round) === round
+                    )?.length +
+                        a?.matchesFailure?.filter(
+                            (match) => String(match?.round) === round
+                        )?.length || b?.matchesSuccess - a?.matchesSuccess)
+            )
+        })
+
+        res.status(200).json(winners)
+    } catch (error) {
+        res.status(500).json({
+            message: 'Ha ocurrido un error al mostar los bookies',
+            error,
+        })
+    }
+}
+
 module.exports = {
     loginBookie,
     register,
@@ -541,4 +609,5 @@ module.exports = {
     getTopMonthSport,
     getBookiesPage,
     getBookieChampion,
+    getBookieChampionRound,
 }

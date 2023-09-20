@@ -104,6 +104,18 @@ const getRoundsBySeason = (req, res) => {
         )
 }
 
+const getRoundsTour = (req, res) => {
+    const { season } = req.params
+    RoundModel.find({ season, status: false })
+        .populate('season league sport')
+        .then((data) => res.status(200).json(data))
+        .catch((error) =>
+            res
+                .status(501)
+                .json({ message: 'No hay jornadas para mostar ', error })
+        )
+}
+
 module.exports = {
     createRound,
     getRounds,
@@ -111,4 +123,5 @@ module.exports = {
     updateRound,
     deleteRound,
     getRoundsBySeason,
+    getRoundsTour,
 }
