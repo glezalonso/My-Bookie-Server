@@ -542,76 +542,30 @@ const removeComment = (req, res) => {
 }
 
 const getMatchesToday = async (req, res) => {
-    const { date, sport } = req.params
+    const { date } = req.params
     const page = parseInt(req.params.page)
     const perPage = 8
 
-    if (sport === 'all') {
-        const total = await MatchModel.count({
-            moreImportant: true,
-            date: { $regex: date, $options: 'i' },
-        })
+    const total = await MatchModel.count({
+        moreImportant: true,
+        date: { $regex: date, $options: 'i' },
+    })
 
-        const totalPages = Math.ceil(total / perPage)
+    const totalPages = Math.ceil(total / perPage)
 
-        MatchModel.find({
-            moreImportant: true,
-            date: { $regex: date, $options: 'i' },
-        })
-            .sort({ status: 'desc', date: 'asc', _id: 'desc' })
-            .skip(page * perPage - perPage)
-            .limit(perPage)
-            .populate(
-                'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username votes.username',
-                { __v: 0 }
-            )
-
-            .then((data) =>
-                res.status(200).json({ data, total, page, totalPages })
-            )
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al mostrarlos juegos',
-                    error,
-                })
-            )
-    } else {
-        const total = await MatchModel.count({
-            sport,
-            date: { $regex: date, $options: 'i' },
-        })
-
-        const totalPages = Math.ceil(total / perPage)
-        MatchModel.find({ sport, date: { $regex: date, $options: 'i' } })
-            .sort({ status: 'desc', date: 'asc', _id: 'desc' })
-            .skip(page * perPage - perPage)
-            .limit(perPage)
-            .populate(
-                'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username votes.username',
-                { __v: 0 }
-            )
-
-            .then((data) =>
-                res.status(200).json({ data, total, page, totalPages })
-            )
-            .catch((error) =>
-                res.status(501).json({
-                    message: 'Ha ocurrido un error al mostrarlos juegos',
-                    error,
-                })
-            )
-    }
-}
-
-const getMatchesTodaySport = async (req, res) => {
-    const { date, sport } = req.params
-    MatchModel.find({ sport, date: { $regex: date, $options: 'i' } })
+    MatchModel.find({
+        moreImportant: true,
+        date: { $regex: date, $options: 'i' },
+    })
+        .sort({ status: 'desc', date: 'asc', _id: 'desc' })
+        .skip(page * perPage - perPage)
+        .limit(perPage)
         .populate(
             'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username votes.username',
             { __v: 0 }
         )
-        .sort({ date: 'asc' })
-        .then((data) => res.status(200).json(data))
+
+        .then((data) => res.status(200).json({ data, total, page, totalPages }))
         .catch((error) =>
             res.status(501).json({
                 message: 'Ha ocurrido un error al mostrarlos juegos',
@@ -619,6 +573,36 @@ const getMatchesTodaySport = async (req, res) => {
             })
         )
 }
+
+const getMatchesTodaySport = async (req, res) => {
+    const { date, sport } = req.params
+    const page = parseInt(req.params.page)
+    const perPage = 8
+
+    const total = await MatchModel.count({
+        sport,
+        date: { $regex: date, $options: 'i' },
+    })
+
+    const totalPages = Math.ceil(total / perPage)
+    MatchModel.find({ sport, date: { $regex: date, $options: 'i' } })
+        .sort({ status: 'desc', date: 'asc', _id: 'desc' })
+        .skip(page * perPage - perPage)
+        .limit(perPage)
+        .populate(
+            'round season league local away sport lineup.local.playerId lineup.away.playerId comments.username votes.username',
+            { __v: 0 }
+        )
+
+        .then((data) => res.status(200).json({ data, total, page, totalPages }))
+        .catch((error) =>
+            res.status(501).json({
+                message: 'Ha ocurrido un error al mostrarlos juegos',
+                error,
+            })
+        )
+}
+
 const getMatchesPanel = async (req, res) => {
     const { date } = req.params
     MatchModel.find({ date: { $regex: date, $options: 'i' } })

@@ -50,14 +50,13 @@ router.put('/removeComment/:id', verifyToken, removeComment)
 
 router.post('/pickem', verifyToken, pickem)
 
-// Extra endpoints
 router.get(`/matchbookie/:id/:status/:page`, verifyToken, getMatchBookie)
 
-router.get('/today/:page/:date/:sport', getMatchesToday)
+router.get('/today/:page/:date', getMatchesToday)
+
+router.get('/todaysport/:page/:date/:sport', getMatchesTodaySport)
 
 router.get('/matchestoday/:date', getMatchesPanel)
-
-router.get('/todaybysport/:sport/:date', getMatchesTodaySport)
 
 router.get('/headtohead/:local/:away', getMatchesH2H)
 

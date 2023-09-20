@@ -579,7 +579,11 @@ const getBookieChampionRound = async (req, res) => {
                     )?.length +
                         a?.matchesFailure?.filter(
                             (match) => String(match?.round) === round
-                        )?.length || b?.matchesSuccess - a?.matchesSuccess)
+                        )?.length ||
+                        b?.matchesSuccess +
+                            b.matchesFailure -
+                            a?.matchesSuccess +
+                            b.matchesFailure)
             )
         })
 
