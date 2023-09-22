@@ -544,7 +544,7 @@ const removeComment = (req, res) => {
 const getMatchesToday = async (req, res) => {
     const { date } = req.params
     const page = parseInt(req.params.page)
-    const perPage = 8
+    const perPage = 6
 
     const total = await MatchModel.count({
         moreImportant: true,
@@ -577,7 +577,7 @@ const getMatchesToday = async (req, res) => {
 const getMatchesTodaySport = async (req, res) => {
     const { date, sport } = req.params
     const page = parseInt(req.params.page)
-    const perPage = 8
+    const perPage = 6
 
     const total = await MatchModel.count({
         sport,
@@ -585,6 +585,7 @@ const getMatchesTodaySport = async (req, res) => {
     })
 
     const totalPages = Math.ceil(total / perPage)
+
     MatchModel.find({ sport, date: { $regex: date, $options: 'i' } })
         .sort({ status: 'desc', date: 'asc', _id: 'desc' })
         .skip(page * perPage - perPage)
