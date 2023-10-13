@@ -32,7 +32,6 @@ const getMatch = (req, res) => {
             'round season league local away sport lineup.local.playerId lineup.away.playerId votes.username comments.username',
             { __v: 0 }
         )
-        .sort({ date: 'asc' })
         .then((data) => res.status(200).json(data))
         .catch((error) =>
             res.status(501).json({
@@ -652,7 +651,7 @@ const getMatchesByRound = (req, res) => {
             messsage: 'Ha ocurrido un error en la peticion',
         })
     MatchModel.find({ round })
-        .populate('round season league local away sport votes.username', {
+        .populate('round season league local away sport', {
             __v: 0,
         })
         .sort({ date: 'asc' })

@@ -112,6 +112,12 @@ const bookieSchema = new Schema({
             ref: 'Tournament',
         },
     ],
+    messages: [
+        {
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: 'Forum',
+        },
+    ],
 })
 
 module.exports = mongoose.model('Bookie', bookieSchema)
