@@ -15,11 +15,10 @@ const forumSchema = new Schema({
         type: String,
         require: [true, 'Campo requerido'],
     },
-    images: [
-        {
-            type: String,
-        },
-    ],
+    images: {
+        public_id: String,
+        secure_url: String,
+    },
     comments: [
         {
             username: {

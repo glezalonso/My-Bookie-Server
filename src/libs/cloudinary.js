@@ -14,6 +14,10 @@ const upload = async (file) => {
     })
 }
 
+const remove = async (id) => {
+    return await v2.uploader.destroy(id)
+}
 module.exports = {
     upload,
+    remove,
 }

@@ -1,7 +1,8 @@
 const BookiesModel = require('../models/Bookies.model')
 const ForumModel = require('../models/Forum.model')
 const ObjectId = require('mongoose').Types.ObjectId
-const { upload } = require('../libs/cloudinary')
+const { upload, remove } = require('../libs/cloudinary')
+const fs = require('fs/promises')
 
 const getMessages = (req, res) => {
     ForumModel.find({})
@@ -36,16 +37,16 @@ const getMessage = (req, res) => {
 
 const createMessage = async (req, res) => {
     const { user, message, date } = req.body
-    console.log(req.body)
+
     if (req.files) {
         const { image } = req.files
         try {
-            const { secure_url } = await upload(image.tempFilePath)
+            const { secure_url, public_id } = await upload(image.tempFilePath)
             const newMessage = new ForumModel({
                 user,
                 message,
                 date,
-                images: secure_url,
+                images: { public_id, secure_url },
             })
             newMessage
                 .save()
@@ -54,6 +55,7 @@ const createMessage = async (req, res) => {
                         { _id: user },
                         { $push: { messages: data._id } }
                     )
+                    await fs.unlink(image.tempFilePath)
                     res.status(200).json(data)
                 })
                 .catch((error) =>
@@ -117,9 +119,10 @@ const deleteMessage = (req, res) => {
     if (!ObjectId.isValid(id))
         return res.status(500).json({ message: 'Error en la petición' })
     ForumModel.findOneAndDelete({ _id: id })
-        .then(() =>
-            res.status(200).json({ message: 'Se ha borrado con exitos' })
-        )
+        .then(async (data) => {
+            await remove(data.images.public_id)
+            res.status(200).json({ message: 'Se ha borrado con exito' })
+        })
         .catch((error) =>
             res.status(500).json({
                 message: 'Hubo un error al eliminar el mensaje',
