@@ -55,11 +55,13 @@ const loginUser = async (req, res) => {
                 })
             }
         })
-        .catch((error) =>
-            res
-                .status(501)
-                .json({ message: 'hubo un error al iniciar sesión', error })
-        )
+        .catch((error) => {
+            console.log(error)
+            res.status(501).json({
+                message: 'hubo un error al iniciar sesión 2',
+                error,
+            })
+        })
 }
 
 const registerUser = async (req, res) => {
