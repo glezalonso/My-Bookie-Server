@@ -33,7 +33,7 @@ const loginUser = async (req, res) => {
     const existUser = await UserModel.findOne({ username })
     if (!existUser)
         return res
-            .status(501)
+            .status(404)
             .json({ message: 'Usuario y/o contraseña no valida' })
     bcrypt
         .compare(password, existUser.password)
