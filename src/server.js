@@ -33,12 +33,7 @@ app.use(
 )
 app.use(compression())
 app.use(express.json())
-app.use(
-    cors({
-        origin: [process.env.CLIENT, process.env.LANDING, process.env.DEV],
-        credentials: true,
-    })
-)
+app.use(cors())
 app.use(morgan('tiny'))
 app.disable('x-powered-by')
 
